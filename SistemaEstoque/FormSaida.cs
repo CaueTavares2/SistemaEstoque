@@ -46,6 +46,7 @@ namespace SistemaEstoque
             int quantidade = (int)nudSaida.Value; // O NumericUpDown é 'nudSaida' 
             decimal precoVenda = produtoSelecionado?.Preco ?? 0;
 
+            //
             if (quantidade <= 0)
             {
                 MessageBox.Show("A quantidade deve ser maior que zero.");
