@@ -55,7 +55,7 @@ namespace SistemaEstoque
             this.lblTituloRelatorio.Size = new System.Drawing.Size(215, 15);
             this.lblTituloRelatorio.TabIndex = 1;
             this.lblTituloRelatorio.Text = "Relatório: Produtos com Estoque Baixo ";
-            this.lblTituloRelatorio.Click += new System.EventHandler(this.lblTituloRelatorio_Click);
+            
             // 
             // lblValorTotal
             // 
@@ -65,7 +65,7 @@ namespace SistemaEstoque
             this.lblValorTotal.Size = new System.Drawing.Size(171, 15);
             this.lblValorTotal.TabIndex = 2;
             this.lblValorTotal.Text = "Valor total em estoque: R$ 0,00 ";
-            this.lblValorTotal.Click += new System.EventHandler(this.lblValorTotal_Click);
+            
             // 
             // btnAtualizarRel
             // 

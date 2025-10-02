@@ -38,7 +38,7 @@ namespace SistemaEstoque
             // 
             // btnEditar
             // 
-            this.btnEditar.Location = new System.Drawing.Point(485, 22);
+            this.btnEditar.Location = new System.Drawing.Point(771, 22);
             this.btnEditar.Name = "btnEditar";
             this.btnEditar.Size = new System.Drawing.Size(75, 23);
             this.btnEditar.TabIndex = 0;
@@ -48,7 +48,7 @@ namespace SistemaEstoque
             // 
             // btnExcluir
             // 
-            this.btnExcluir.Location = new System.Drawing.Point(485, 211);
+            this.btnExcluir.Location = new System.Drawing.Point(771, 216);
             this.btnExcluir.Name = "btnExcluir";
             this.btnExcluir.Size = new System.Drawing.Size(75, 23);
             this.btnExcluir.TabIndex = 1;
@@ -58,7 +58,7 @@ namespace SistemaEstoque
             // 
             // btnAtualizar
             // 
-            this.btnAtualizar.Location = new System.Drawing.Point(485, 402);
+            this.btnAtualizar.Location = new System.Drawing.Point(780, 402);
             this.btnAtualizar.Name = "btnAtualizar";
             this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
             this.btnAtualizar.TabIndex = 2;
@@ -75,14 +75,14 @@ namespace SistemaEstoque
             this.dgvProdutos.ReadOnly = true;
             this.dgvProdutos.RowTemplate.Height = 25;
             this.dgvProdutos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProdutos.Size = new System.Drawing.Size(356, 403);
+            this.dgvProdutos.Size = new System.Drawing.Size(680, 403);
             this.dgvProdutos.TabIndex = 3;
             // 
             // FormListagem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(603, 450);
+            this.ClientSize = new System.Drawing.Size(884, 450);
             this.Controls.Add(this.dgvProdutos);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnExcluir);

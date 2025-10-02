@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
+using System.Collections.Generic; // Necessário se a versão anterior do FormSaida usava
+
 namespace SistemaEstoque
 {
     public partial class FormSaida : Form
@@ -15,12 +17,19 @@ namespace SistemaEstoque
         {
             // Carrega a lista de produtos existentes no ComboBox
             ProdutoDAO dao = new ProdutoDAO();
+
+            // O ObterTodos retorna uma lista de objetos Produto.
             cmbProduto.DataSource = dao.ObterTodos();
-            cmbProduto.DisplayMember = "Nome"; // Exibe o nome do produto
-            cmbProduto.ValueMember = "Id"; // Usa o Id do produto como valor interno
+
+            // Define o que será exibido (o nome) e o que será o valor real (o ID)
+            cmbProduto.DisplayMember = "Nome";
+            cmbProduto.ValueMember = "Id";
         }
 
-        private void btnRegistrarSaida_Click(object sender, EventArgs e)
+        // REMOVIDO: O método btnRegistrarSaida_Click agora está vazio ou deve ser excluído se não estiver ligado a um botão.
+        // Se este método estiver ligado ao botão, APAGUE o método vazio abaixo e RENOMEIE este para btnConfirmar_Click.
+
+        private void btnConfirmar_Click(object sender, EventArgs e)
         {
             // 1. Validação e obtenção de dados
             if (cmbProduto.SelectedValue == null)
@@ -29,8 +38,13 @@ namespace SistemaEstoque
                 return;
             }
 
+            // Obtém o objeto Produto completo para pegar o preço de venda e verificar o estoque
+            Produto produtoSelecionado = cmbProduto.SelectedItem as Produto;
+
+            // O ID e a Quantidade são obtidos dos componentes
             int idProduto = (int)cmbProduto.SelectedValue;
-            int quantidade = (int)nudSaida.Value;
+            int quantidade = (int)nudSaida.Value; // O NumericUpDown é 'nudSaida' 
+            decimal precoVenda = produtoSelecionado?.Preco ?? 0;
 
             if (quantidade <= 0)
             {
@@ -38,12 +52,12 @@ namespace SistemaEstoque
                 return;
             }
 
-            // Busca o preço atual do produto para registrar na movimentação
-            // NOTE: Isso exige que ObterTodos() retorne um objeto Produto com o preço,
-            // ou que você implemente um método ObterProdutoPorId() no ProdutoDAO.
-            // Para simplificar, vamos assumir que o preço está disponível na lista carregada.
-            Produto produtoSelecionado = cmbProduto.SelectedItem as Produto;
-            decimal precoVenda = produtoSelecionado?.Preco ?? 0; // Preço do produto no momento da saída
+            // Adiciona a verificação de estoque [cite: 529]
+            if (quantidade > produtoSelecionado.Quantidade)
+            {
+                MessageBox.Show("Estoque insuficiente.");
+                return;
+            }
 
             if (precoVenda <= 0)
             {
@@ -51,30 +65,26 @@ namespace SistemaEstoque
                 return;
             }
 
-            // 2. Execução da transação (Atualização de estoque + Registro de Movimentação)
+            // 2. Execução da transação
             MovimentacaoDAO dao = new MovimentacaoDAO();
 
             try
             {
-                // A MovimentacaoDAO.RegistrarSaida executa a transação no banco.
                 dao.RegistrarSaida(idProduto, quantidade, precoVenda);
 
                 MessageBox.Show($"Saída de {quantidade} unidades de '{produtoSelecionado.Nome}' registrada com sucesso!");
-                nudSaida.Value = 1; // Limpa/reseta o campo
+                nudSaida.Value = 1; // Reseta o campo de quantidade [cite: 535]
 
-                // Recarrega a lista se for necessário mostrar o estoque atualizado
-                CarregarProdutos();
+                CarregarProdutos(); // Recarrega para atualizar a quantidade em estoque [cite: 535]
             }
             catch (Exception ex)
             {
-                // Este erro geralmente indica falha na transação ou quantidade insuficiente (a depender da sua regra de negócio SQL)
                 MessageBox.Show("Erro ao registrar saída: " + ex.Message);
             }
         }
 
-        private void btnConfirmar_Click(object sender, EventArgs e)
-        {
+        
 
-        }
+        // Remove ou renomeie o método btnRegistrarSaida_Click se ele não estiver associado ao botão.
     }
 }

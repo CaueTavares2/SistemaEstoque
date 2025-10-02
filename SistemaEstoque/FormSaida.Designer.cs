@@ -76,6 +76,7 @@ namespace SistemaEstoque
             0,
             0,
             0});
+            
             // 
             // cmbProduto
             // 

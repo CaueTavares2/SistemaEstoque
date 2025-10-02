@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using MySqlConnector;
-using SistemaEstoque.DAO; // Necessário para acessar o Database.GetConnection
+using SistemaEstoque.DAO;
+using MySqlConnector; // Necessário para MySqlConnection e MySqlDataAdapter
 
 namespace SistemaEstoque
 {
@@ -22,29 +22,25 @@ namespace SistemaEstoque
                 {
                     conn.Open();
 
-                    // Relatório 1: Produtos com Estoque Baixo (Quantidade < Estoque Mínimo)
-                    string sqlBaixo = "SELECT idproduto, nome_produto, quantidade, estoque_minimo, preco_venda FROM produto WHERE quantidade < estoque_minimo";
-
+                    // Relatório 1: Produtos com estoque baixo (quantidade abaixo do estoque mínimo) [cite: 570, 571]
+                    string sqlBaixo = "SELECT nome_produto, quantidade, estoque_minimo, preco_venda FROM produto WHERE quantidade < estoque_minimo";
+                    
                     MySqlDataAdapter da = new MySqlDataAdapter(sqlBaixo, conn);
                     DataTable dt = new DataTable();
-
-                    // Preenche o DataTable com os resultados da query
+                    
                     da.Fill(dt);
-
-                    // Define o DataTable como fonte de dados da DataGridView
                     dgvRelatorio.DataSource = dt;
 
-                    // Relatório 2: Valor total em estoque (Soma de: Quantidade * Preço de Venda)
+                    // Relatório 2: Valor total em estoque (Soma de: Quantidade * Preço de Venda) 
                     string sqlTotal = "SELECT SUM(quantidade * preco_venda) AS total FROM produto";
                     MySqlCommand cmd = new MySqlCommand(sqlTotal, conn);
-
+                    
                     object result = cmd.ExecuteScalar();
-
-                    // Trata o resultado, caso seja nulo (estoque vazio)
+                    
+                    // Trata o resultado, caso seja nulo (inventário vazio) 
                     decimal total = (result != DBNull.Value) ? Convert.ToDecimal(result) : 0;
-
-                    // Exibe o valor total em um Label formatado como moeda
-                    // Assumindo que você tem um Label chamado lblValorTotal na sua tela
+                    
+                    // Exibe o valor total no Label formatado como moeda [cite: 581]
                     lblValorTotal.Text = $"Valor total em estoque: {total:C2}";
                 }
             }
@@ -57,16 +53,6 @@ namespace SistemaEstoque
         private void btnAtualizarRel_Click(object sender, EventArgs e)
         {
             GerarRelatorio();
-        }
-
-        private void lblValorTotal_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTituloRelatorio_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
