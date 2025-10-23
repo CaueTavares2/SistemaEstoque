@@ -59,13 +59,21 @@ namespace SistemaEstoque
 
         private void lblCadastro_Click(object sender, EventArgs e)
         {
-            // Abre a nova tela de cadastro de usuários em modo modal
+            // 1. Oculta o formulário de Login
+            this.Hide();
+
+            // 2. Abre o formulário de Cadastro em modo modal (bloqueia outras interações até que ele seja fechado)
             using (var formCadastro = new FormCadastroUsuario())
             {
                 formCadastro.ShowDialog();
             }
 
-            // Opcional: Limpa os campos de login para o usuário
+            // 3. Ao fechar o FormCadastroUsuario, ele volta para cá. 
+            //    Agora, reexibe o FormLogin (ou fecha tudo, dependendo do seu fluxo desejado).
+            //    Se o usuário cadastrado precisar logar, ele verá a tela de login novamente.
+            this.Show();
+
+            // Opcional: Limpa os campos de login para o próximo acesso
             txtUsuario.Clear();
             txtSenha.Clear();
             txtUsuario.Focus();
