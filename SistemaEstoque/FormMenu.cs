@@ -16,5 +16,10 @@ namespace SistemaEstoque
 
         private void btnSairMenu_Click(object sender, EventArgs e) { this.Close(); }
 
+        private void btnCadastroUsuario_Click(object sender, EventArgs e)
+        {
+            // Abre a nova tela de cadastro de usuários
+            new FormCadastroUsuario().ShowDialog();
+        }
     }
 }

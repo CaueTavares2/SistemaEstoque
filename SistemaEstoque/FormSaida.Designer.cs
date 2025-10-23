@@ -57,6 +57,7 @@ namespace SistemaEstoque
             // 
             // nudSaida
             // 
+            this.nudSaida.BackColor = System.Drawing.Color.WhiteSmoke;
             this.nudSaida.Location = new System.Drawing.Point(323, 116);
             this.nudSaida.Maximum = new decimal(new int[] {
             1000,
@@ -76,7 +77,6 @@ namespace SistemaEstoque
             0,
             0,
             0});
-            
             // 
             // cmbProduto
             // 
@@ -101,6 +101,7 @@ namespace SistemaEstoque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(586, 277);
             this.Controls.Add(this.btnConfirmar);
             this.Controls.Add(this.cmbProduto);

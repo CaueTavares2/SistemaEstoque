@@ -35,12 +35,13 @@ namespace SistemaEstoque
             this.btnSairMenu = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLogin = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCadastro
             // 
-            this.btnCadastro.Location = new System.Drawing.Point(6, 22);
+            this.btnCadastro.Location = new System.Drawing.Point(61, 22);
             this.btnCadastro.Name = "btnCadastro";
             this.btnCadastro.Size = new System.Drawing.Size(75, 23);
             this.btnCadastro.TabIndex = 0;
@@ -50,7 +51,7 @@ namespace SistemaEstoque
             // 
             // btnListagem
             // 
-            this.btnListagem.Location = new System.Drawing.Point(110, 22);
+            this.btnListagem.Location = new System.Drawing.Point(176, 22);
             this.btnListagem.Name = "btnListagem";
             this.btnListagem.Size = new System.Drawing.Size(75, 23);
             this.btnListagem.TabIndex = 1;
@@ -60,7 +61,7 @@ namespace SistemaEstoque
             // 
             // btnRelatorio
             // 
-            this.btnRelatorio.Location = new System.Drawing.Point(331, 22);
+            this.btnRelatorio.Location = new System.Drawing.Point(431, 22);
             this.btnRelatorio.Name = "btnRelatorio";
             this.btnRelatorio.Size = new System.Drawing.Size(75, 23);
             this.btnRelatorio.TabIndex = 2;
@@ -70,7 +71,7 @@ namespace SistemaEstoque
             // 
             // btnSairMenu
             // 
-            this.btnSairMenu.Location = new System.Drawing.Point(206, 218);
+            this.btnSairMenu.Location = new System.Drawing.Point(242, 219);
             this.btnSairMenu.Name = "btnSairMenu";
             this.btnSairMenu.Size = new System.Drawing.Size(90, 23);
             this.btnSairMenu.TabIndex = 3;
@@ -80,7 +81,7 @@ namespace SistemaEstoque
             // 
             // btnSaida
             // 
-            this.btnSaida.Location = new System.Drawing.Point(215, 22);
+            this.btnSaida.Location = new System.Drawing.Point(295, 22);
             this.btnSaida.Name = "btnSaida";
             this.btnSaida.Size = new System.Drawing.Size(75, 23);
             this.btnSaida.TabIndex = 4;
@@ -90,22 +91,34 @@ namespace SistemaEstoque
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.groupBox1.Controls.Add(this.btnLogin);
             this.groupBox1.Controls.Add(this.btnSaida);
             this.groupBox1.Controls.Add(this.btnRelatorio);
             this.groupBox1.Controls.Add(this.btnCadastro);
             this.groupBox1.Controls.Add(this.btnListagem);
-            this.groupBox1.Location = new System.Drawing.Point(50, 132);
+            this.groupBox1.Location = new System.Drawing.Point(12, 69);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(412, 53);
+            this.groupBox1.Size = new System.Drawing.Size(586, 116);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Menu";
+            // 
+            // btnLogin
+            // 
+            this.btnLogin.Location = new System.Drawing.Point(236, 77);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(75, 23);
+            this.btnLogin.TabIndex = 5;
+            this.btnLogin.Text = "Login";
+            this.btnLogin.UseVisualStyleBackColor = true;
             // 
             // FormMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(518, 324);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(610, 324);
             this.Controls.Add(this.btnSairMenu);
             this.Controls.Add(this.groupBox1);
             this.Name = "FormMenu";
@@ -123,5 +136,6 @@ namespace SistemaEstoque
         private System.Windows.Forms.Button btnSairMenu;
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnLogin;
     }
 }

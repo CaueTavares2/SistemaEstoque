@@ -55,7 +55,6 @@ namespace SistemaEstoque
             this.lblTituloRelatorio.Size = new System.Drawing.Size(215, 15);
             this.lblTituloRelatorio.TabIndex = 1;
             this.lblTituloRelatorio.Text = "Relatório: Produtos com Estoque Baixo ";
-            
             // 
             // lblValorTotal
             // 
@@ -65,7 +64,6 @@ namespace SistemaEstoque
             this.lblValorTotal.Size = new System.Drawing.Size(171, 15);
             this.lblValorTotal.TabIndex = 2;
             this.lblValorTotal.Text = "Valor total em estoque: R$ 0,00 ";
-            
             // 
             // btnAtualizarRel
             // 
@@ -81,6 +79,7 @@ namespace SistemaEstoque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(394, 462);
             this.Controls.Add(this.btnAtualizarRel);
             this.Controls.Add(this.lblValorTotal);

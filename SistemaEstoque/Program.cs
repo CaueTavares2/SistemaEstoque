@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SistemaEstoque
@@ -15,7 +12,7 @@ namespace SistemaEstoque
         static void Main()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
+            Application.EnableVisualStyles(); // Mantém o visual moderno do Windows
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormLogin());
         }

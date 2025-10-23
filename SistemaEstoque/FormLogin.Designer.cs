@@ -35,6 +35,7 @@ namespace SistemaEstoque
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.lblSenha = new System.Windows.Forms.Label();
             this.lblUsuario = new System.Windows.Forms.Label();
+            this.lblCadastro = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSair
@@ -49,12 +50,13 @@ namespace SistemaEstoque
             // 
             // btnEntrar
             // 
+            this.btnEntrar.BackColor = System.Drawing.Color.White;
             this.btnEntrar.Location = new System.Drawing.Point(80, 273);
             this.btnEntrar.Name = "btnEntrar";
             this.btnEntrar.Size = new System.Drawing.Size(75, 23);
             this.btnEntrar.TabIndex = 10;
             this.btnEntrar.Text = "Entrar";
-            this.btnEntrar.UseVisualStyleBackColor = true;
+            this.btnEntrar.UseVisualStyleBackColor = false;
             this.btnEntrar.Click += new System.EventHandler(this.btnEntrar_Click);
             // 
             // txtSenha
@@ -90,12 +92,28 @@ namespace SistemaEstoque
             this.lblUsuario.TabIndex = 6;
             this.lblUsuario.Text = "Usuário:";
             // 
+            // lblCadastro
+            // 
+            this.lblCadastro.AutoSize = true;
+            this.lblCadastro.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblCadastro.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblCadastro.ForeColor = System.Drawing.Color.Blue;
+            this.lblCadastro.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.lblCadastro.Location = new System.Drawing.Point(61, 330);
+            this.lblCadastro.Name = "lblCadastro";
+            this.lblCadastro.Size = new System.Drawing.Size(164, 15);
+            this.lblCadastro.TabIndex = 12;
+            this.lblCadastro.Text = "É novo por aqui? Clique aqui!";
+            this.lblCadastro.Click += new System.EventHandler(this.lblCadastro_Click);
+            // 
             // FormLogin
             // 
             this.AcceptButton = this.btnEntrar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(397, 440);
+            this.Controls.Add(this.lblCadastro);
             this.Controls.Add(this.btnSair);
             this.Controls.Add(this.btnEntrar);
             this.Controls.Add(this.txtSenha);
@@ -117,5 +135,6 @@ namespace SistemaEstoque
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.Label lblSenha;
         private System.Windows.Forms.Label lblUsuario;
+        private System.Windows.Forms.Label lblCadastro;
     }
 }

@@ -82,6 +82,7 @@ namespace SistemaEstoque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(884, 450);
             this.Controls.Add(this.dgvProdutos);
             this.Controls.Add(this.btnAtualizar);

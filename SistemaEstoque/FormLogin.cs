@@ -56,6 +56,11 @@ namespace SistemaEstoque
         {
 
         }
+
+        private void lblCadastro_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
