@@ -1,8 +1,8 @@
-﻿// Arquivo: FormCadastroUsuario.cs
+﻿// Arquivo: FormCadastroUsuario.cs (REVISADO)
 
 using System;
 using System.Windows.Forms;
-using SistemaEstoque.DAO; // Importa o DAO para usar a classe UsuarioDAO
+using SistemaEstoque.DAO;
 
 namespace SistemaEstoque
 {
@@ -13,9 +13,9 @@ namespace SistemaEstoque
             InitializeComponent();
         }
 
-        private void btnCadastrarUsuario_Click(object sender, EventArgs e)
+        private void btnCadastrarUsuario_Click_1(object sender, EventArgs e) // <--- ESTE É O MÉTODO QUE DEVE SER LIGADO AO BOTÃO
         {
-            // 1. Coleta de dados (Assumindo que os campos se chamam: txtLogin, txtSenha, txtConfirmaSenha)
+            // 1. Coleta de dados (VERIFIQUE SE OS NOMES SÃO EXATAMENTE ESTES!)
             string login = txtLogin.Text.Trim();
             string senha = txtSenha.Text;
             string confirmaSenha = txtConfirmaSenha.Text;
@@ -51,7 +51,10 @@ namespace SistemaEstoque
             catch (Exception)
             {
                 // A exceção de erro de banco já foi tratada e exibida dentro do DAO.
+                // Não precisa fazer nada aqui, a não ser que queira logar o erro.
             }
         }
+
+        
     }
 }

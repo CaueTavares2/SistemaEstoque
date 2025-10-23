@@ -35,7 +35,6 @@ namespace SistemaEstoque
             this.btnSairMenu = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnLogin = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,7 +91,6 @@ namespace SistemaEstoque
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox1.Controls.Add(this.btnLogin);
             this.groupBox1.Controls.Add(this.btnSaida);
             this.groupBox1.Controls.Add(this.btnRelatorio);
             this.groupBox1.Controls.Add(this.btnCadastro);
@@ -103,15 +101,6 @@ namespace SistemaEstoque
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Menu";
-            // 
-            // btnLogin
-            // 
-            this.btnLogin.Location = new System.Drawing.Point(236, 77);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(75, 23);
-            this.btnLogin.TabIndex = 5;
-            this.btnLogin.Text = "Login";
-            this.btnLogin.UseVisualStyleBackColor = true;
             // 
             // FormMenu
             // 
@@ -136,6 +125,5 @@ namespace SistemaEstoque
         private System.Windows.Forms.Button btnSairMenu;
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btnLogin;
     }
 }

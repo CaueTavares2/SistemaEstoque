@@ -104,7 +104,7 @@ namespace SistemaEstoque
             this.lblCadastro.Size = new System.Drawing.Size(164, 15);
             this.lblCadastro.TabIndex = 12;
             this.lblCadastro.Text = "É novo por aqui? Clique aqui!";
-            this.lblCadastro.Click += new System.EventHandler(this.lblCadastro_Click);
+            
             // 
             // FormLogin
             // 
@@ -124,6 +124,8 @@ namespace SistemaEstoque
             this.Text = "FormLogin";
             this.ResumeLayout(false);
             this.PerformLayout();
+
+
 
         }
 

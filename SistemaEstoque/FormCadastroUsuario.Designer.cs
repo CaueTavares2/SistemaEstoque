@@ -102,6 +102,7 @@ namespace SistemaEstoque
             this.btnCadastrarUsuario.TabIndex = 6;
             this.btnCadastrarUsuario.Text = "Cadastrar";
             this.btnCadastrarUsuario.UseVisualStyleBackColor = true;
+            this.btnCadastrarUsuario.Click += new System.EventHandler(this.btnCadastrarUsuario_Click_1);
             // 
             // FormCadastroUsuario
             // 

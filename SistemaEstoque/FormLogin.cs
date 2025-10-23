@@ -1,83 +1,96 @@
-﻿using System;
-
+﻿
+using System;
 using System.Windows.Forms;
-
 using SistemaEstoque.DAO;
+using System.Threading; // Pode ser útil para timers, mas vamos usar o Timer do Designer
 
 namespace SistemaEstoque
-
 {
-
     public partial class FormLogin : Form
-
     {
+        // 1. Adicionar um Timer (Você precisa adicioná-lo no FormLogin.Designer.cs)
+        private System.Windows.Forms.Timer tmrFadeOut;
+        private System.Windows.Forms.Timer tmrFadeIn;
+        private FormMenu menuForm; // Variável para armazenar a instância do FormMenu
 
-        public FormLogin() { InitializeComponent(); }
+        public FormLogin()
+        {
+            InitializeComponent();
+            InicializarTimers(); // Chamada para configurar os timers
+        }
+
+        private void InicializarTimers()
+        {
+            // Configuração do Timer para Fade Out (saída do Login)
+            tmrFadeOut = new System.Windows.Forms.Timer();
+            tmrFadeOut.Interval = 20; // Intervalo pequeno para animação suave
+            tmrFadeOut.Tick += new EventHandler(tmrFadeOut_Tick);
+
+            // Configuração do Timer para Fade In (entrada do Menu)
+            tmrFadeIn = new System.Windows.Forms.Timer();
+            tmrFadeIn.Interval = 20;
+            tmrFadeIn.Tick += new EventHandler(tmrFadeIn_Tick);
+        }
+
 
         private void btnEntrar_Click(object sender, EventArgs e)
-
         {
-
             string user = txtUsuario.Text.Trim();
-
             string pass = txtSenha.Text;
-
             UsuarioDAO dao = new UsuarioDAO();
 
             if (dao.ValidarLogin(user, pass))
-
             {
+                // 1. ESCONDE O LOGIN (como já combinamos)
+                // this.Hide(); // Não vamos esconder ainda, vamos animar
 
-                this.Hide();
+                // 2. Prepara o formulário de destino
+                menuForm = new FormMenu();
 
-                using (var menu = new FormMenu())
-
-                {
-
-                    menu.ShowDialog();
-
-                }
-
-                this.Close();
-
+                // 3. Inicia o Fade Out do formulário atual
+                tmrFadeOut.Start();
+                this.btnEntrar.Enabled = false; // Desabilita o botão para evitar cliques múltiplos
             }
-
             else
-
             {
-
                 MessageBox.Show("Usuário ou senha incorretos.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             }
+        }
 
+        private void tmrFadeOut_Tick(object sender, EventArgs e)
+        {
+            if (this.Opacity > 0)
+            {
+                this.Opacity -= 0.05; // Reduz a opacidade em 5% por tick
+            }
+            else
+            {
+                tmrFadeOut.Stop();
+                // Transição completa: Fecha o Login e abre o Menu com animação
+                this.Hide();
+                menuForm.Opacity = 0; // Garante que o próximo formulário comece transparente
+                menuForm.Show();
+                tmrFadeIn.Start(); // Inicia o Fade In do Menu
+            }
+        }
+
+        private void tmrFadeIn_Tick(object sender, EventArgs e)
+        {
+            if (menuForm.Opacity < 1)
+            {
+                menuForm.Opacity += 0.05; // Aumenta a opacidade em 5% por tick
+            }
+            else
+            {
+                tmrFadeIn.Stop();
+                // Animação completa, fecha o FormLogin permanentemente (como no seu fluxo original)
+                this.Close();
+            }
         }
 
         private void btnSair_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void lblCadastro_Click(object sender, EventArgs e)
-        {
-            // 1. Oculta o formulário de Login
-            this.Hide();
-
-            // 2. Abre o formulário de Cadastro em modo modal (bloqueia outras interações até que ele seja fechado)
-            using (var formCadastro = new FormCadastroUsuario())
-            {
-                formCadastro.ShowDialog();
-            }
-
-            // 3. Ao fechar o FormCadastroUsuario, ele volta para cá. 
-            //    Agora, reexibe o FormLogin (ou fecha tudo, dependendo do seu fluxo desejado).
-            //    Se o usuário cadastrado precisar logar, ele verá a tela de login novamente.
-            this.Show();
-
-            // Opcional: Limpa os campos de login para o próximo acesso
-            txtUsuario.Clear();
-            txtSenha.Clear();
-            txtUsuario.Focus();
+            this.Close();
         }
     }
-
 }
