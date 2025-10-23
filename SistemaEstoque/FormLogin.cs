@@ -59,7 +59,16 @@ namespace SistemaEstoque
 
         private void lblCadastro_Click(object sender, EventArgs e)
         {
+            // Abre a nova tela de cadastro de usuários em modo modal
+            using (var formCadastro = new FormCadastroUsuario())
+            {
+                formCadastro.ShowDialog();
+            }
 
+            // Opcional: Limpa os campos de login para o usuário
+            txtUsuario.Clear();
+            txtSenha.Clear();
+            txtUsuario.Focus();
         }
     }
 
