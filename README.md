@@ -36,7 +36,7 @@ A string de conexão está definida em `DAO/Database.cs`. **Você precisa ajusta
 ```csharp
 // DAO/Database.cs
 public static string ConnectionString = "Server=localhost;Database=bd_sistema_estoque;Uid=root;Pwd=;"; // AJUSTE AQUI!
-
+```
 
 ## 🧩 Sistema de Código de Erros (Error Codes)
 
