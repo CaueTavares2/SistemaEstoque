@@ -3,6 +3,7 @@
 using System;
 using MySqlConnector;
 using System.Windows.Forms;
+using SistemaEstoque.Utils;
 
 namespace SistemaEstoque.DAO
 {
@@ -51,15 +52,13 @@ namespace SistemaEstoque.DAO
                 {
                     conn.Open();
 
-                    // CRÍTICO: Compara o login e o HASH SHA256 da senha digitada
-                    // com o hash salvo no banco. O Login só funciona se o Admin tiver a senha hasheada no banco.
-                    string sql = "SELECT COUNT(*) FROM usuario WHERE login=@login AND senha=SHA2('" + senha + "', 256)";
-                    // NOTA: Usamos concatenação aqui (SHA2('"+senha+"', 256)) pois o MySqlConnector não suporta 
-                    // a função SHA2 como um parâmetro '@senhaHash' diretamente na query.
+                    string sql = "SELECT COUNT(*) FROM usuario WHERE login=@login AND senha=@senha";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
+
                     cmd.Parameters.AddWithValue("@login", login);
-                    // O valor de 'senha' já está concatenado na string SQL.
+
+                    cmd.Parameters.AddWithValue("@senha", senha);
 
                     int count = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -68,7 +67,11 @@ namespace SistemaEstoque.DAO
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao conectar ao banco de dados: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Erro 201: Falha na conexão/query do UsuárioDAO
+                SistemaEstoque.Utils.Logger.Log("201", "Erro ao executar consulta de login no banco de dados.", ex);
+
+                MessageBox.Show("Erro grave de sistema: Não foi possível conectar ao banco de dados. Verifique o arquivo de log.", "Erro de Conexão", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 return false;
             }
         }
