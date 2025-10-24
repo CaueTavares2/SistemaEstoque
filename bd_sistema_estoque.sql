@@ -1,3 +1,4 @@
+
 --
 -- SCRIPT DE CRIAÇÃO DO BANCO DE DADOS E TABELAS
 --
@@ -78,3 +79,4 @@ INSERT INTO produto
     (nome_produto, quantidade, preco_venda, estoque_minimo, fk_categoria_idcategoria) 
 VALUES 
     ('Mouse Gamer RGB', 15, 89.90, 5, 1); -- Categoria 1: Eletrônicos
+```
