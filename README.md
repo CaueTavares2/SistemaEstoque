@@ -36,3 +36,26 @@ A string de conexão está definida em `DAO/Database.cs`. **Você precisa ajusta
 ```csharp
 // DAO/Database.cs
 public static string ConnectionString = "Server=localhost;Database=bd_sistema_estoque;Uid=root;Pwd=;"; // AJUSTE AQUI!
+
+
+## 🧩 Sistema de Código de Erros (Error Codes)
+
+Para facilitar a rastreabilidade de problemas, o sistema utiliza um código de erro de três dígitos ao registrar falhas no arquivo `C:\Logs\SistemaEstoque\sistema_estoque.log`.
+
+A estrutura do código é a seguinte:
+
+| Código | Área do Sistema | Descrição Geral |
+| :----: | :-------------: | :-------------- |
+| **1xx** | Inicialização/Geral | Erros que ocorrem ao iniciar a aplicação ou falhas inesperadas. |
+| **2xx** | **DAO - Usuário** | Erros relacionados ao `UsuarioDAO` (Login, Banco de Dados). |
+| **3xx** | **DAO - Produto** | Erros relacionados ao `ProdutoDAO` (CRUD de Produtos). |
+| **4xx** | **DAO - Movimentação** | Erros relacionados ao `MovimentacaoDAO` (Baixa de Estoque). |
+| **5xx** | **Interfaces (Forms)** | Erros de validação ou interação em formulários. |
+
+### Exemplos Comuns:
+
+* **201:** Falha na conexão ou execução de consulta SQL no `UsuarioDAO`.
+* **302:** Erro ao tentar atualizar um registro no `ProdutoDAO`.
+* **401:** Falha na transação (rollback) ao registrar saída de estoque no `MovimentacaoDAO`.
+
+O **Logger** registra o código de erro, a mensagem, o tipo da exceção e o *Stack Trace* completo para auxiliar no diagnóstico.
