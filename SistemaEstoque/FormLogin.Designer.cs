@@ -97,14 +97,13 @@ namespace SistemaEstoque
             this.lblCadastro.AutoSize = true;
             this.lblCadastro.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblCadastro.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblCadastro.ForeColor = System.Drawing.Color.Blue;
             this.lblCadastro.ForeColor = System.Drawing.SystemColors.Highlight;
             this.lblCadastro.Location = new System.Drawing.Point(61, 330);
             this.lblCadastro.Name = "lblCadastro";
             this.lblCadastro.Size = new System.Drawing.Size(164, 15);
             this.lblCadastro.TabIndex = 12;
             this.lblCadastro.Text = "É novo por aqui? Clique aqui!";
-            
+            this.lblCadastro.Click += new System.EventHandler(this.lblCadastro_Click);
             // 
             // FormLogin
             // 
@@ -124,8 +123,6 @@ namespace SistemaEstoque
             this.Text = "FormLogin";
             this.ResumeLayout(false);
             this.PerformLayout();
-
-
 
         }
 

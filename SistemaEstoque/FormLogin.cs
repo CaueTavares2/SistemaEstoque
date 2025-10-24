@@ -1,17 +1,15 @@
-﻿
-using System;
+﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
-using System.Threading; // Pode ser útil para timers, mas vamos usar o Timer do Designer
+using SistemaEstoque.Utils; // Importa o Logger
 
 namespace SistemaEstoque
 {
     public partial class FormLogin : Form
     {
-        // 1. Adicionar um Timer (Você precisa adicioná-lo no FormLogin.Designer.cs)
         private System.Windows.Forms.Timer tmrFadeOut;
         private System.Windows.Forms.Timer tmrFadeIn;
-        private FormMenu menuForm; // Variável para armazenar a instância do FormMenu
+        private FormMenu menuForm;
 
         public FormLogin()
         {
@@ -23,7 +21,7 @@ namespace SistemaEstoque
         {
             // Configuração do Timer para Fade Out (saída do Login)
             tmrFadeOut = new System.Windows.Forms.Timer();
-            tmrFadeOut.Interval = 20; // Intervalo pequeno para animação suave
+            tmrFadeOut.Interval = 20;
             tmrFadeOut.Tick += new EventHandler(tmrFadeOut_Tick);
 
             // Configuração do Timer para Fade In (entrada do Menu)
@@ -32,27 +30,46 @@ namespace SistemaEstoque
             tmrFadeIn.Tick += new EventHandler(tmrFadeIn_Tick);
         }
 
-
         private void btnEntrar_Click(object sender, EventArgs e)
         {
             string user = txtUsuario.Text.Trim();
             string pass = txtSenha.Text;
-            UsuarioDAO dao = new UsuarioDAO();
 
-            if (dao.ValidarLogin(user, pass))
+            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
             {
-                // 1. ESCONDE O LOGIN (como já combinamos)
-                // this.Hide(); // Não vamos esconder ainda, vamos animar
+                MessageBox.Show("Preencha todos os campos.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                // 2. Prepara o formulário de destino
-                menuForm = new FormMenu();
+            UsuarioDAO dao = new UsuarioDAO();
+            bool loginValido = false;
 
-                // 3. Inicia o Fade Out do formulário atual
+            try
+            {
+                loginValido = dao.ValidarLogin(user, pass);
+            }
+            catch // Captura erros que o DAO não conseguiu tratar internamente (raro, mas possível)
+            {
+                // Este log já deve ocorrer dentro do UsuarioDAO se for erro de conexão.
+                // Mantido como fallback para erros inesperados fora do DAO.
+                Logger.LogError($"[FormLogin] Erro inesperado ao tentar chamar ValidarLogin para o usuário: {user}.", null);
+                MessageBox.Show("Ocorreu um erro inesperado durante a validação.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (loginValido)
+            {
+                // Se o login é válido, iniciamos a animação de saída
+                menuForm = new FormMenu(); // Instancia o Menu aqui
                 tmrFadeOut.Start();
-                this.btnEntrar.Enabled = false; // Desabilita o botão para evitar cliques múltiplos
+                this.btnEntrar.Enabled = false;
             }
             else
             {
+                // *** CORREÇÃO DO ERRO CS7036: Passando 'null' para o parâmetro 'Exception' ***
+                Logger.LogError($"Tentativa de login falhou: Usuário '{user}' tentou acessar com credenciais inválidas.", null);
+                // ***************************************************************
+
                 MessageBox.Show("Usuário ou senha incorretos.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
@@ -61,16 +78,15 @@ namespace SistemaEstoque
         {
             if (this.Opacity > 0)
             {
-                this.Opacity -= 0.05; // Reduz a opacidade em 5% por tick
+                this.Opacity -= 0.05;
             }
             else
             {
                 tmrFadeOut.Stop();
-                // Transição completa: Fecha o Login e abre o Menu com animação
                 this.Hide();
-                menuForm.Opacity = 0; // Garante que o próximo formulário comece transparente
+                menuForm.Opacity = 0;
                 menuForm.Show();
-                tmrFadeIn.Start(); // Inicia o Fade In do Menu
+                tmrFadeIn.Start();
             }
         }
 
@@ -78,19 +94,25 @@ namespace SistemaEstoque
         {
             if (menuForm.Opacity < 1)
             {
-                menuForm.Opacity += 0.05; // Aumenta a opacidade em 5% por tick
+                menuForm.Opacity += 0.05;
             }
             else
             {
                 tmrFadeIn.Stop();
-                // Animação completa, fecha o FormLogin permanentemente (como no seu fluxo original)
                 this.Close();
             }
         }
 
         private void btnSair_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
         }
+
+        // *** CORREÇÃO DO ERRO CS1061: Método renomeado para corresponder ao Designer ***
+        private void lblCadastro_Click(object sender, EventArgs e)
+        {
+            new FormCadastroUsuario().ShowDialog();
+        }
+        // ******************************************************************************
     }
 }

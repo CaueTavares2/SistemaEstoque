@@ -3,7 +3,7 @@
 using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
-
+using SistemaEstoque.Utils;
 namespace SistemaEstoque
 {
     public partial class FormCadastroUsuario : Form
@@ -15,7 +15,7 @@ namespace SistemaEstoque
 
         private void btnCadastrarUsuario_Click_1(object sender, EventArgs e) // <--- ESTE É O MÉTODO QUE DEVE SER LIGADO AO BOTÃO
         {
-            // 1. Coleta de dados (VERIFIQUE SE OS NOMES SÃO EXATAMENTE ESTES!)
+            // 1. Coleta de dados
             string login = txtLogin.Text.Trim();
             string senha = txtSenha.Text;
             string confirmaSenha = txtConfirmaSenha.Text;
@@ -48,13 +48,14 @@ namespace SistemaEstoque
                 txtConfirmaSenha.Clear();
                 txtLogin.Focus();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // A exceção de erro de banco já foi tratada e exibida dentro do DAO.
-                // Não precisa fazer nada aqui, a não ser que queira logar o erro.
+                // LOG: Registra o erro que veio do DAO (que também loga internamente)
+                Logger.LogError($"Erro durante o cadastro de usuário capturado em FormCadastroUsuario para o login: {login}", ex);
+                // A mensagem de erro específica já foi mostrada pelo DAO, apenas limpamos o formulário se necessário
             }
         }
 
-        
+
     }
 }

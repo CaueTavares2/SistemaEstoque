@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
+using SistemaEstoque.Utils; // NOVO: Importa o Logger
+
 namespace SistemaEstoque
 {
     public partial class FormCadastro : Form
@@ -25,7 +27,17 @@ namespace SistemaEstoque
         {
             // Puxa as categorias do banco de dados e popula o ComboBox
             CategoriaDAO dao = new CategoriaDAO();
-            cmbCategoria.DataSource = dao.ObterCategorias();
+            try
+            {
+                cmbCategoria.DataSource = dao.ObterCategorias();
+            }
+            catch (Exception ex)
+            {
+                // O DAO já logou o erro. Aqui logamos o contexto do Formulário (opcional, mas bom).
+                Logger.LogError("Erro capturado no FormCadastro ao carregar categorias.", ex);
+                MessageBox.Show("Erro ao carregar categorias. Verifique o log de erros.", "Erro de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Opcional: Desabilitar botões se a falha for crítica (ex: falha de conexão).
+            }
         }
 
         private void CarregarProdutoParaEdicao()
@@ -39,19 +51,21 @@ namespace SistemaEstoque
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
-            // 1. Validação
+            // 1. Validação de campos obrigatórios
             if (string.IsNullOrWhiteSpace(txtNome.Text) || cmbCategoria.SelectedItem == null)
             {
-                MessageBox.Show("Preencha todos os campos obrigatórios.");
-                return;
-            }
-            if (!decimal.TryParse(txtPreco.Text, out decimal preco))
-            {
-                MessageBox.Show("Preço inválido.");
+                MessageBox.Show("Nome e Categoria são campos obrigatórios.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. Criação do objeto Produto
+            // 2. Validação e conversão de preço
+            if (!decimal.TryParse(txtPreco.Text, out decimal preco) || preco <= 0)
+            {
+                MessageBox.Show("Preço de venda inválido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 3. Criação/Atualização do Objeto Produto
             var p = new Produto
             {
                 Nome = txtNome.Text.Trim(),
@@ -62,6 +76,7 @@ namespace SistemaEstoque
 
             ProdutoDAO dao = new ProdutoDAO();
             // Atenção: Aqui assumimos que o ID da categoria no banco é o índice + 1
+            // (Isso é uma prática comum quando a listagem retorna nomes na ordem do ID 1, 2, 3...)
             int idCategoria = cmbCategoria.SelectedIndex + 1;
 
             try
@@ -80,9 +95,11 @@ namespace SistemaEstoque
                     this.Close(); // Fecha a tela após a edição
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) // Captura qualquer erro do DAO (que já logou o erro detalhado)
             {
-                MessageBox.Show("Erro ao salvar: " + ex.Message);
+                // Loga o erro no contexto do formulário e exibe uma mensagem amigável ao usuário.
+                Logger.LogError($"Erro capturado no FormCadastro ao tentar salvar/atualizar o produto {p.Nome}.", ex);
+                MessageBox.Show("Erro ao salvar o produto. Verifique o log de erros para detalhes.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

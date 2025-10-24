@@ -6,15 +6,41 @@ namespace SistemaEstoque
     {
         public FormMenu() { InitializeComponent(); }
 
-        private void btnCadastro_Click(object sender, EventArgs e) { new FormCadastro().ShowDialog(); }
+        private void btnCadastro_Click(object sender, EventArgs e)
+        {
+            using (var f = new FormCadastro())
+            {
+                f.ShowDialog();
+            }
+        }
 
-        private void btnListagem_Click(object sender, EventArgs e) { new FormListagem().ShowDialog(); }
+        private void btnListagem_Click(object sender, EventArgs e)
+        {
+            using (var f = new FormListagem())
+            {
+                f.ShowDialog();
+            }
+        }
 
-        private void btnSaida_Click(object sender, EventArgs e) { new FormSaida().ShowDialog(); }
 
-        private void btnRelatorio_Click(object sender, EventArgs e) { new FormRelatorio().ShowDialog(); }
+        private void btnSaida_Click(object sender, EventArgs e)
+        {
+            using (var f = new FormSaida())
+            {
+                f.ShowDialog();
 
-        private void btnSairMenu_Click(object sender, EventArgs e) { this.Close(); }
+            }
+        }
+
+        private void btnRelatorio_Click(object sender, EventArgs e) 
+        { 
+            using (var f = new FormRelatorio())
+            {
+                f.ShowDialog();
+            } }
+
+        private void btnSairMenu_Click(object sender, EventArgs e) 
+        { Application.Exit();}
 
         private void btnCadastroUsuario_Click(object sender, EventArgs e)
         {

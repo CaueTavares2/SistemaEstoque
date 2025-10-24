@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿// CategoriaDAO.cs
+
+using System; // Necessário para Exception
+using System.Collections.Generic;
 using MySqlConnector;
 using SistemaEstoque.DAO;
+using SistemaEstoque.Utils; // NOVO: Importa o Logger
 
 namespace SistemaEstoque.DAO
 {
@@ -9,22 +13,28 @@ namespace SistemaEstoque.DAO
         public List<string> ObterCategorias()
         {
             var lista = new List<string>();
-            using (var conn = Database.GetConnection())
+            try // NOVO: Bloco try
             {
-                conn.Open();
-
-                // MUDANÇA ESSENCIAL AQUI: Ordena as categorias pelo ID
-                // Isso garante que a ordem no ComboBox será (ID 1, ID 2, ID 3, ID 4, ID 5)
-                string sql = "SELECT nome FROM categoria ORDER BY idcategoria";
-
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                using (var reader = cmd.ExecuteReader())
+                using (var conn = Database.GetConnection())
                 {
-                    while (reader.Read())
+                    conn.Open();
+                    string sql = "SELECT nome FROM categoria ORDER BY idcategoria";
+
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        lista.Add(reader.GetString("nome"));
+                        while (reader.Read())
+                        {
+                            lista.Add(reader.GetString("nome"));
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Loga o erro
+                Logger.LogError("Falha ao obter lista de categorias do banco de dados.", ex);
+                throw; // Re-lança para que o Form possa tratar (e.g., exibir mensagem)
             }
             return lista;
         }
