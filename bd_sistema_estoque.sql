@@ -71,9 +71,6 @@ INSERT INTO categoria (nome) VALUES
 ('Ferramentas'),
 ('Escritório');
 
--- Insere um usuário padrão para login (Usuário: admin / Senha: 123)
-INSERT INTO usuario (login, senha) VALUES ('admin', '123');
-
 -- Exemplo de inserção de produto para teste
 INSERT INTO produto 
     (nome_produto, quantidade, preco_venda, estoque_minimo, fk_categoria_idcategoria) 
