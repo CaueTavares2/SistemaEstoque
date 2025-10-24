@@ -35,6 +35,7 @@ namespace SistemaEstoque
             this.btnSairMenu = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblAlertaEstoque = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,18 +103,34 @@ namespace SistemaEstoque
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Menu";
             // 
+            // lblAlertaEstoque
+            // 
+
+            this.lblAlertaEstoque.AutoSize = true;
+            this.lblAlertaEstoque.ForeColor = System.Drawing.Color.Red;
+            this.lblAlertaEstoque.Location = new System.Drawing.Point(12, 290);
+            this.lblAlertaEstoque.Name = "lblAlertaEstoque";
+            this.lblAlertaEstoque.Size = new System.Drawing.Size(300, 20);
+            this.lblAlertaEstoque.TabIndex = 6;
+            this.lblAlertaEstoque.Text = "Nenhum alerta.";
+            this.lblAlertaEstoque.Visible = false;
+            this.lblAlertaEstoque = new System.Windows.Forms.Label();
+            this.Controls.Add(this.lblAlertaEstoque);
+            // 
             // FormMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(610, 324);
+            this.Controls.Add(this.lblAlertaEstoque);
             this.Controls.Add(this.btnSairMenu);
             this.Controls.Add(this.groupBox1);
             this.Name = "FormMenu";
             this.Text = "FormMenu";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -125,5 +142,6 @@ namespace SistemaEstoque
         private System.Windows.Forms.Button btnSairMenu;
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblAlertaEstoque;
     }
 }

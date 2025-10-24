@@ -109,6 +109,23 @@ preco_venda=@venda, fk_categoria_idcategoria=@cat WHERE idproduto=@id";
             }
         }
 
+        public int ContarProdutosBaixoEstoque()
+        {
+            using (var conn = Database.GetConnection())
+            {
+                conn.Open();
+                // Conta quantos registros na tabela 'produto' têm a quantidade menor que o mínimo.
+                string sql = "SELECT COUNT(*) FROM produto WHERE quantidade < estoque_minimo";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                // ExecuteScalar retorna o valor da primeira coluna da primeira linha da consulta.
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                return count;
+            }
+        }
+
         /// <summary>
         /// Exclui um produto e todas as suas movimentações relacionadas.
         /// </summary>
