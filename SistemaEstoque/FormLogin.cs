@@ -7,8 +7,7 @@ namespace SistemaEstoque
 {
     public partial class FormLogin : Form
     {
-        private System.Windows.Forms.Timer tmrFadeOut;
-        private System.Windows.Forms.Timer tmrFadeIn;
+        
         private FormMenu menuForm;
 
         public FormLogin()
@@ -35,41 +34,28 @@ namespace SistemaEstoque
             string user = txtUsuario.Text.Trim();
             string pass = txtSenha.Text;
 
-            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
-            {
-                MessageBox.Show("Preencha todos os campos.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             UsuarioDAO dao = new UsuarioDAO();
-            bool loginValido = false;
 
-            try
+            if (dao.ValidarLogin(user, pass))
             {
-                loginValido = dao.ValidarLogin(user, pass);
-            }
-            catch // Captura erros que o DAO não conseguiu tratar internamente (raro, mas possível)
-            {
-                // Este log já deve ocorrer dentro do UsuarioDAO se for erro de conexão.
-                // Mantido como fallback para erros inesperados fora do DAO.
-                Logger.LogError($"[FormLogin] Erro inesperado ao tentar chamar ValidarLogin para o usuário: {user}.", null);
-                MessageBox.Show("Ocorreu um erro inesperado durante a validação.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                // ----------------------------------------------------
+                // CÓDIGO TEMPORÁRIO DE TESTE: IGNORA A ANIMAÇÃO
+                // ----------------------------------------------------
 
-            if (loginValido)
-            {
-                // Se o login é válido, iniciamos a animação de saída
-                menuForm = new FormMenu(); // Instancia o Menu aqui
-                tmrFadeOut.Start();
-                this.btnEntrar.Enabled = false;
+                // 1. Esconde a tela de Login
+                this.Hide();
+
+                // 2. Cria e mostra o FormMenu IMEDIATAMENTE
+                FormMenu menuForm = new FormMenu();
+                menuForm.Show();
+
+                // 3. Fecha o FormLogin
+                this.Close();
+
+                // ----------------------------------------------------
             }
             else
             {
-                // *** CORREÇÃO DO ERRO CS7036: Passando 'null' para o parâmetro 'Exception' ***
-                Logger.LogError($"Tentativa de login falhou: Usuário '{user}' tentou acessar com credenciais inválidas.", null);
-                // ***************************************************************
-
                 MessageBox.Show("Usuário ou senha incorretos.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

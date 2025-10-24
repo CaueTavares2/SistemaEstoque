@@ -124,6 +124,7 @@ namespace SistemaEstoque
             this.ResumeLayout(false);
             this.PerformLayout();
 
+
         }
 
         #endregion
@@ -135,5 +136,7 @@ namespace SistemaEstoque
         private System.Windows.Forms.Label lblSenha;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblCadastro;
+        private System.Windows.Forms.Timer tmrFadeOut;
+        private System.Windows.Forms.Timer tmrFadeIn;
     }
 }
