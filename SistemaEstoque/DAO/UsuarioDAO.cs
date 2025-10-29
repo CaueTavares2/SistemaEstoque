@@ -1,15 +1,16 @@
-﻿// Arquivo: UsuarioDAO.cs (ATUALIZADO COM LOGGER)
+﻿// Arquivo: UsuarioDAO.cs (SUBSTITUIÇÃO COMPLETA)
 
 using System;
 using MySqlConnector;
 using System.Windows.Forms;
-using SistemaEstoque.DAO;
-using SistemaEstoque.Utils; // Importe o novo namespace do Logger
+using SistemaEstoque;
+using SistemaEstoque.Logger;
 
 namespace SistemaEstoque.DAO
 {
     public class UsuarioDAO
     {
+
         // 1. Método de Inserção de Novo Usuário
         public void Inserir(string login, string senha)
         {
@@ -18,36 +19,31 @@ namespace SistemaEstoque.DAO
                 using (var conn = Database.GetConnection())
                 {
                     conn.Open();
-
-                    // Usando a função nativa do MySQL para manter a consistência com a sua query anterior
-                    string sql = "INSERT INTO usuario (login, senha) VALUES (@login, SHA2(@senha, 256))";
+                    // O novo usuário é salvo como 'Operador' por padrão
+                    string sql = "INSERT INTO usuario (login, senha, nivel_acesso) VALUES (@login, SHA2(@senha, 256), 'Operador')";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@login", login);
-                    cmd.Parameters.AddWithValue("@senha", senha); // O MySQL fará o hash
+                    cmd.Parameters.AddWithValue("@senha", senha);
 
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                // LOG: Registra o erro de inserção
-                Logger.LogError($"Falha ao inserir novo usuário: {login}", ex);
-
                 if (ex.Message.Contains("Duplicate entry"))
                 {
-                    MessageBox.Show("Erro: O login informado já está em uso. Por favor, escolha outro.", "Erro de Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Erro: O login informado já está em uso.", "Erro de Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
-                    MessageBox.Show("Erro ao tentar cadastrar o usuário: Verifique o log de erros.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Erro ao tentar cadastrar o usuário: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                throw;
             }
         }
 
-        // 2. Método de Validação de Login
-        public bool ValidarLogin(string login, string senha)
+        // 2. Método de Validação de Login (AGORA RETORNA ID E NÍVEL DE ACESSO)
+        public (int id, string nivelAcesso) ObterUsuarioLogado(string login, string senha)
         {
             try
             {
@@ -55,23 +51,31 @@ namespace SistemaEstoque.DAO
                 {
                     conn.Open();
 
-                    // CRÍTICO: Compara o login e o HASH SHA256 da senha digitada
-                    // NOTA: Mantido o estilo de concatenação para usar a função SHA2 do MySQL.
-                    string sql = $"SELECT COUNT(*) FROM usuario WHERE login=@login AND senha=SHA2('{senha}', 256)";
+                    // Seleciona ID e NÍVEL DE ACESSO
+                    string sql = "SELECT idusuario, nivel_acesso FROM usuario WHERE login=@login AND senha=SHA2('" + senha + "', 256)";
 
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
                     cmd.Parameters.AddWithValue("@login", login);
 
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int id = reader.GetInt32("idusuario");
+                            string nivelAcesso = reader.GetString("nivel_acesso");
+                            return (id, nivelAcesso); // Retorna o ID e o Nível de Acesso
+                        }
+                        else
+                        {
+                            return (0, null); // Login falhou.
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // LOG: Registra o erro de validação/conexão
-                Logger.LogError($"Falha na validação de login para o usuário: {login}", ex);
-                MessageBox.Show("Erro ao conectar ao banco de dados durante o login.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                MessageBox.Show("Erro ao conectar ao banco de dados: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return (0, null);
             }
         }
     }

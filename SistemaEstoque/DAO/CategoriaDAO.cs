@@ -3,8 +3,9 @@
 using System; // Necessário para Exception
 using System.Collections.Generic;
 using MySqlConnector;
+using SistemaEstoque.Logger;
 using SistemaEstoque.DAO;
-using SistemaEstoque.Utils; // NOVO: Importa o Logger
+
 
 namespace SistemaEstoque.DAO
 {
@@ -33,7 +34,7 @@ namespace SistemaEstoque.DAO
             catch (Exception ex)
             {
                 // Loga o erro
-                Logger.LogError("Falha ao obter lista de categorias do banco de dados.", ex);
+                LogManager.WriteLog(ex.Message, "Falha ao obter lista de categorias do banco de dados.");
                 throw; // Re-lança para que o Form possa tratar (e.g., exibir mensagem)
             }
             return lista;

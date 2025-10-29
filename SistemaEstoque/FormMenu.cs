@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO; // Importante para acessar o ProdutoDAO
+using SistemaEstoque.Classes;
 
 namespace SistemaEstoque
 {
@@ -9,44 +10,46 @@ namespace SistemaEstoque
         public FormMenu()
         {
             InitializeComponent();
-            // O InitializeComponent() inicializa o lblAlertaEstoque.
-            // A verificação deve vir APÓS esta chamada!
+            VerificarPermissoes();
             VerificarEstoqueBaixo();
         }
+
+        private void VerificarPermissoes()
+        {
+            // Restrição: Apenas o 'Admin' pode acessar o cadastro de usuários.
+            if (UserSession.NivelAcesso != "Admin")
+            {
+                // Verifica se o componente 'btnCadastroUsuario' existe e o desabilita
+                var btnUser = this.Controls.Find("btnCadastroUsuario", true);
+                if (btnUser.Length > 0 && btnUser[0] is Button btn)
+                {
+                    btn.Enabled = false;
+                    btn.Text = "Cadastro Usuário (Restrito)";
+                    btn.BackColor = System.Drawing.Color.LightGray;
+                }
+            }
+        }
+
 
         private void VerificarEstoqueBaixo()
         {
             ProdutoDAO dao = new ProdutoDAO();
-            try
-            {
-                // Verifica quantos produtos estão com estoque baixo (Usando o método que criamos)
-                int totalBaixo = dao.ContarProdutosBaixoEstoque();
+            var produtosBaixoEstoque = dao.ObterProdutosComEstoqueBaixo();
 
-                if (totalBaixo > 0)
-                {
-                    this.lblAlertaEstoque.Text = $"ATENÇÃO! {totalBaixo} produto(s) com estoque baixo!";
-                    this.lblAlertaEstoque.ForeColor = System.Drawing.Color.Red;
-                    this.lblAlertaEstoque.Visible = true; // Torna o Label visível
-                }
-                else
-                {
-                    // Garante que esteja oculto se não houver alerta
-                    this.lblAlertaEstoque.Visible = false;
-                }
-            }
-            catch (Exception ex)
+            if (produtosBaixoEstoque.Count > 0)
             {
-                // Em caso de falha de conexão ou erro no DAO, exibe o problema no Label.
-                this.lblAlertaEstoque.Text = "ERRO: Falha ao checar estoque (Verifique o Banco de Dados).";
-                this.lblAlertaEstoque.ForeColor = System.Drawing.Color.OrangeRed;
-                this.lblAlertaEstoque.Visible = true;
+                string mensagem = "ATENÇÃO! Os seguintes produtos estão com estoque abaixo do mínimo:\n\n";
+                foreach (var p in produtosBaixoEstoque)
+                {
+                    mensagem += $"- {p.Nome} (Estoque atual: {p.Quantidade})\n";
+                }
 
-                // Opcional: Logar o erro no arquivo (se você quiser logar o erro no sistema_estoque_log.txt)
-                // SistemaEstoque.Utils.Logger.LogError("Falha ao checar estoque no FormMenu.", ex);
+                // Este é o popup que aparece logo após o login e o 'Bem Vindo'.
+                MessageBox.Show(mensagem, "Alerta de Estoque Baixo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
-        // ... (Mantenha o resto dos seus métodos Click)
+        // Métodos de botões (Mantenha conforme seu layout)
         private void btnCadastro_Click(object sender, EventArgs e) { new FormCadastro().ShowDialog(); }
 
         private void btnListagem_Click(object sender, EventArgs e) { new FormListagem().ShowDialog(); }
@@ -60,6 +63,17 @@ namespace SistemaEstoque
         private void btnCadastroUsuario_Click(object sender, EventArgs e)
         {
             new FormCadastroUsuario().ShowDialog();
+        }
+
+        private void btnFornecedores_Click(object sender, EventArgs e)
+        {
+            // Abre o novo formulário de Fornecedores
+            new FormFornecedor().ShowDialog();
+        }
+
+        private void FormMenu_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

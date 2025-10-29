@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
-using SistemaEstoque.Utils; // NOVO: Importa o Logger
+using SistemaEstoque.Logger;
 
 namespace SistemaEstoque
 {
@@ -28,7 +28,7 @@ namespace SistemaEstoque
             catch (Exception ex)
             {
                 // O DAO já logou o erro. Aqui logamos o contexto do Formulário (opcional).
-                Logger.LogError("Erro capturado no FormListagem ao carregar produtos para a grid.", ex);
+                LogManager.WriteLog(ex.Message, "Erro capturado no FormListagem ao carregar produtos para a grid.");
                 MessageBox.Show("Erro ao carregar a lista de produtos. Verifique o log de erros.", "Erro de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 dgvProdutos.DataSource = null; // Limpa o grid em caso de falha
             }
@@ -90,7 +90,7 @@ namespace SistemaEstoque
                 catch (Exception ex)
                 {
                     // O DAO já logou o erro detalhado.
-                    Logger.LogError($"Erro capturado no FormListagem ao excluir produto ID: {p.Id}.", ex);
+                    LogManager.WriteLog(ex.Message, "Erro capturado no FormListagem ao excluir produto ID: {p.Id}.");
                     MessageBox.Show("Erro ao excluir o produto. Verifique o log de erros para detalhes.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

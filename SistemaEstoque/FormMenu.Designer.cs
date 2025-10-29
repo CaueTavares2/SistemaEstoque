@@ -1,5 +1,4 @@
-﻿
-namespace SistemaEstoque
+﻿namespace SistemaEstoque
 {
     partial class FormMenu
     {
@@ -35,56 +34,63 @@ namespace SistemaEstoque
             this.btnSairMenu = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lblAlertaEstoque = new System.Windows.Forms.Label();
+            this.btnFornecedores = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCadastro
             // 
-            this.btnCadastro.Location = new System.Drawing.Point(61, 22);
+            this.btnCadastro.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnCadastro.Location = new System.Drawing.Point(93, 30);
             this.btnCadastro.Name = "btnCadastro";
-            this.btnCadastro.Size = new System.Drawing.Size(75, 23);
-            this.btnCadastro.TabIndex = 0;
-            this.btnCadastro.Text = "Cadastrar";
+            this.btnCadastro.Size = new System.Drawing.Size(120, 40);
+            this.btnCadastro.TabIndex = 1; // TabIndex 1
+            this.btnCadastro.Text = "Cadastro (Prod.)";
             this.btnCadastro.UseVisualStyleBackColor = true;
             this.btnCadastro.Click += new System.EventHandler(this.btnCadastro_Click);
             // 
             // btnListagem
             // 
-            this.btnListagem.Location = new System.Drawing.Point(176, 22);
+            this.btnListagem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnListagem.Location = new System.Drawing.Point(233, 30);
             this.btnListagem.Name = "btnListagem";
-            this.btnListagem.Size = new System.Drawing.Size(75, 23);
-            this.btnListagem.TabIndex = 1;
+            this.btnListagem.Size = new System.Drawing.Size(120, 40);
+            this.btnListagem.TabIndex = 2; // TabIndex 2
             this.btnListagem.Text = "Listagem";
             this.btnListagem.UseVisualStyleBackColor = true;
             this.btnListagem.Click += new System.EventHandler(this.btnListagem_Click);
             // 
             // btnRelatorio
             // 
-            this.btnRelatorio.Location = new System.Drawing.Point(431, 22);
+            this.btnRelatorio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnRelatorio.Location = new System.Drawing.Point(93, 90);
             this.btnRelatorio.Name = "btnRelatorio";
-            this.btnRelatorio.Size = new System.Drawing.Size(75, 23);
-            this.btnRelatorio.TabIndex = 2;
+            this.btnRelatorio.Size = new System.Drawing.Size(120, 40);
+            this.btnRelatorio.TabIndex = 4; // TabIndex 4
             this.btnRelatorio.Text = "Relatório";
             this.btnRelatorio.UseVisualStyleBackColor = true;
             this.btnRelatorio.Click += new System.EventHandler(this.btnRelatorio_Click);
             // 
             // btnSairMenu
             // 
-            this.btnSairMenu.Location = new System.Drawing.Point(242, 219);
+            this.btnSairMenu.BackColor = System.Drawing.Color.LightCoral;
+            this.btnSairMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSairMenu.ForeColor = System.Drawing.Color.White;
+            this.btnSairMenu.Location = new System.Drawing.Point(260, 212); // Posição centralizada abaixo do GroupBox
             this.btnSairMenu.Name = "btnSairMenu";
-            this.btnSairMenu.Size = new System.Drawing.Size(90, 23);
-            this.btnSairMenu.TabIndex = 3;
+            this.btnSairMenu.Size = new System.Drawing.Size(90, 35);
+            this.btnSairMenu.TabIndex = 6; // TabIndex 6 (Último)
             this.btnSairMenu.Text = "Sair do Menu";
-            this.btnSairMenu.UseVisualStyleBackColor = true;
+            this.btnSairMenu.UseVisualStyleBackColor = false;
             this.btnSairMenu.Click += new System.EventHandler(this.btnSairMenu_Click);
             // 
             // btnSaida
             // 
-            this.btnSaida.Location = new System.Drawing.Point(295, 22);
+            this.btnSaida.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSaida.Location = new System.Drawing.Point(373, 30);
             this.btnSaida.Name = "btnSaida";
-            this.btnSaida.Size = new System.Drawing.Size(75, 23);
-            this.btnSaida.TabIndex = 4;
+            this.btnSaida.Size = new System.Drawing.Size(120, 40);
+            this.btnSaida.TabIndex = 3; // TabIndex 3
             this.btnSaida.Text = "Saída";
             this.btnSaida.UseVisualStyleBackColor = true;
             this.btnSaida.Click += new System.EventHandler(this.btnSaida_Click);
@@ -92,45 +98,45 @@ namespace SistemaEstoque
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.groupBox1.Controls.Add(this.btnFornecedores);
             this.groupBox1.Controls.Add(this.btnSaida);
             this.groupBox1.Controls.Add(this.btnRelatorio);
             this.groupBox1.Controls.Add(this.btnCadastro);
             this.groupBox1.Controls.Add(this.btnListagem);
-            this.groupBox1.Location = new System.Drawing.Point(12, 69);
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBox1.Location = new System.Drawing.Point(12, 40);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(586, 116);
-            this.groupBox1.TabIndex = 5;
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.groupBox1.Size = new System.Drawing.Size(586, 160); // Aumentamos a altura
+            this.groupBox1.TabIndex = 0; // TabIndex 0
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Menu";
+            this.groupBox1.Text = "Painel de Ações"; // Nome mais descritivo
             // 
-            // lblAlertaEstoque
+            // btnFornecedores
             // 
-
-            this.lblAlertaEstoque.AutoSize = true;
-            this.lblAlertaEstoque.ForeColor = System.Drawing.Color.Red;
-            this.lblAlertaEstoque.Location = new System.Drawing.Point(12, 290);
-            this.lblAlertaEstoque.Name = "lblAlertaEstoque";
-            this.lblAlertaEstoque.Size = new System.Drawing.Size(300, 20);
-            this.lblAlertaEstoque.TabIndex = 6;
-            this.lblAlertaEstoque.Text = "Nenhum alerta.";
-            this.lblAlertaEstoque.Visible = false;
-            this.lblAlertaEstoque = new System.Windows.Forms.Label();
-            this.Controls.Add(this.lblAlertaEstoque);
+            this.btnFornecedores.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnFornecedores.Location = new System.Drawing.Point(233, 90);
+            this.btnFornecedores.Name = "btnFornecedores";
+            this.btnFornecedores.Size = new System.Drawing.Size(120, 40);
+            this.btnFornecedores.TabIndex = 5; // TabIndex 5
+            this.btnFornecedores.Text = "Fornecedores";
+            this.btnFornecedores.UseVisualStyleBackColor = true;
+            this.btnFornecedores.Click += new System.EventHandler(this.btnFornecedores_Click);
             // 
             // FormMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(610, 324);
-            this.Controls.Add(this.lblAlertaEstoque);
+            this.ClientSize = new System.Drawing.Size(610, 270); // Ajustamos a altura
             this.Controls.Add(this.btnSairMenu);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
             this.Name = "FormMenu";
-            this.Text = "FormMenu";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Sistema de Controle de Estoque - Menu Principal";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -142,6 +148,6 @@ namespace SistemaEstoque
         private System.Windows.Forms.Button btnSairMenu;
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lblAlertaEstoque;
+        private System.Windows.Forms.Button btnFornecedores;
     }
 }

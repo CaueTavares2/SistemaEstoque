@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
-using SistemaEstoque.Utils; // NOVO: Importa o Logger
+using SistemaEstoque.Logger;
+
 
 namespace SistemaEstoque
 {
@@ -34,7 +35,7 @@ namespace SistemaEstoque
             catch (Exception ex)
             {
                 // O DAO já logou o erro. Aqui logamos o contexto do Formulário (opcional, mas bom).
-                Logger.LogError("Erro capturado no FormCadastro ao carregar categorias.", ex);
+                LogManager.WriteLog(ex.Message, "Erro capturado no FormCadastro ao carregar categorias.");
                 MessageBox.Show("Erro ao carregar categorias. Verifique o log de erros.", "Erro de BD", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 // Opcional: Desabilitar botões se a falha for crítica (ex: falha de conexão).
             }
@@ -98,7 +99,7 @@ namespace SistemaEstoque
             catch (Exception ex) // Captura qualquer erro do DAO (que já logou o erro detalhado)
             {
                 // Loga o erro no contexto do formulário e exibe uma mensagem amigável ao usuário.
-                Logger.LogError($"Erro capturado no FormCadastro ao tentar salvar/atualizar o produto {p.Nome}.", ex);
+                LogManager.WriteLog(ex.Message, "Erro capturado no FormCadastro ao tentar salvar/atualizar o produto {p.Nome}.");
                 MessageBox.Show("Erro ao salvar o produto. Verifique o log de erros para detalhes.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

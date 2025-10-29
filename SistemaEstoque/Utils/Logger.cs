@@ -1,63 +1,49 @@
-﻿// Arquivo: SistemaEstoque/Utils/Logger.cs
+﻿// Arquivo: LogManager.cs (ou Logger.cs)
 
 using System;
 using System.IO;
+// Adicionamos System.Windows.Forms apenas para o MessageBox em caso de erro no log
+using System.Windows.Forms;
 
-namespace SistemaEstoque.Utils
+namespace SistemaEstoque.Logger
 {
-    public static class Logger
+    // Tornamos a classe estática para facilitar o acesso de qualquer lugar: LogManager.WriteLog(...)
+    public static class LogManager
     {
-        // NOVO: Define o caminho do log para a pasta "Documentos" do usuário.
-        private static readonly string LogDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        private static readonly string LogFileName = "sistema_estoque_log.txt";
+        // CRÍTICO: Define o caminho para a Área de Trabalho do usuário
+        private static readonly string LogDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        // Define o nome do arquivo de log
+        private static readonly string LogFileName = "SistemaEstoque_Log.txt";
+
+        // Combina o caminho do diretório com o nome do arquivo
         private static readonly string LogFilePath = Path.Combine(LogDirectory, LogFileName);
 
-        /// <summary>
-        /// Registra uma mensagem de ERRO no arquivo de log.
-        /// </summary>
-        /// <param name="message">A mensagem de erro.</param>
-        /// <param name="ex">A exceção (pode ser null).</param>
-        public static void LogError(string message, Exception ex)
+        public static void WriteLog(string message, string type = "INFO")
         {
-            // Cria a entrada de log com data e hora
-            string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [ERROR] {message}";
-
-            if (ex != null)
-            {
-                // Adiciona detalhes da exceção se ela for fornecida
-                logEntry += Environment.NewLine;
-                logEntry += $"  --> Exception: {ex.Message}";
-                logEntry += Environment.NewLine;
-                logEntry += $"  --> StackTrace: {ex.StackTrace}";
-            }
-
-            // Adiciona uma nova linha no final
-            logEntry += Environment.NewLine;
-
-            // Tenta escrever no arquivo. 
             try
             {
-                // Usa File.AppendAllText para garantir que o arquivo seja aberto, escrito e fechado em cada chamada,
-                // o que evita o NullReferenceException que você estava vendo.
-                File.AppendAllText(LogFilePath, logEntry);
-            }
-            catch (Exception fileEx)
-            {
-                // Se falhar a escrita do log (ex: permissão negada na pasta Documentos), 
-                // avisa o desenvolvedor no Debug/Console.
-                System.Diagnostics.Debug.WriteLine($"FALHA CRÍTICA: Não foi possível escrever no arquivo de log em '{LogFilePath}'. Erro: {fileEx.Message}");
-            }
-        }
+                // Formato do log: [DATA HORA] [TIPO] MENSAGEM
+                string logEntry = $"[{DateTime.Now:dd/MM/yyyy HH:mm:ss}] [{type}] {message}{Environment.NewLine}";
 
-        // Opcional: Adicionar um método para logs informativos/sucesso
-        public static void LogInfo(string message)
-        {
-            string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [INFO] {message}{Environment.NewLine}";
-            try
-            {
+                // 1. Verifica e cria o diretório se necessário (embora a Área de Trabalho sempre exista)
+                if (!Directory.Exists(LogDirectory))
+                {
+                    Directory.CreateDirectory(LogDirectory);
+                }
+
+                // 2. Adiciona o texto ao arquivo. Cria o arquivo se ele não existir.
                 File.AppendAllText(LogFilePath, logEntry);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                // Em caso de falha na escrita do log (ex: problemas de permissão), 
+                // exibimos um alerta, mas evitamos travar a aplicação principal.
+                MessageBox.Show($"Erro grave ao tentar escrever no log: {ex.Message}\nO log deveria ser salvo em: {LogFilePath}",
+                                "Erro de Logger",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
     }
 }

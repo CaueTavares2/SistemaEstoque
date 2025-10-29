@@ -3,7 +3,8 @@
 using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
-using SistemaEstoque.Utils;
+using SistemaEstoque.Logger;
+
 namespace SistemaEstoque
 {
     public partial class FormCadastroUsuario : Form
@@ -51,7 +52,7 @@ namespace SistemaEstoque
             catch (Exception ex)
             {
                 // LOG: Registra o erro que veio do DAO (que também loga internamente)
-                Logger.LogError($"Erro durante o cadastro de usuário capturado em FormCadastroUsuario para o login: {login}", ex);
+                LogManager.WriteLog(ex.Message, "Erro durante o cadastro de usuário capturado em FormCadastroUsuario para o login: {login}");
                 // A mensagem de erro específica já foi mostrada pelo DAO, apenas limpamos o formulário se necessário
             }
         }
