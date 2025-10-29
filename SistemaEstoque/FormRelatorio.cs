@@ -1,8 +1,11 @@
-﻿// Arquivo: FormRelatorio.cs (CÓDIGO PRINCIPAL)
+﻿// Arquivo: FormRelatorio.cs (COMPLETO)
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-// Adicione 'usings' necessários, como para a camada DAO/Model
+using SistemaEstoque.DAO;
+// Ajuste o namespace abaixo se a classe Produto não estiver em SistemaEstoque.Classes
+using Produto = SistemaEstoque;
 
 namespace SistemaEstoque
 {
@@ -13,35 +16,61 @@ namespace SistemaEstoque
             InitializeComponent();
         }
 
-        // 1. Método requerido pelo Designer (Erro CS1061)
+        // Chamado no carregamento inicial para exibir os dados (CORREÇÃO APLICADA AQUI)
         private void FormRelatorio_Load(object sender, EventArgs e)
         {
-            // Lógica a ser executada quando o formulário é carregado.
-            // É comum chamar o método de atualização aqui para mostrar dados iniciais.
-            btnAtualizarRel_Click(sender, e);
+            // O carregamento inicial apenas chama o método de atualização
+            AtualizarDadosRelatorio();
         }
 
-        // 2. Método requerido pelo Designer (Erro CS1061)
-        private void btnFechar_Click(object sender, EventArgs e)
-        {
-            // Ação: Fechar o formulário de relatório.
-            this.Close();
-        }
-
-        // 3. Método para gerar/atualizar o relatório
+        // Lógica para o botão Atualizar
         private void btnAtualizarRel_Click(object sender, EventArgs e)
         {
-            // **********************************************
-            // COLOQUE AQUI SUA LÓGICA DE NEGÓCIO:
-            // 1. Chamar o método na sua DAO que busca o relatório de estoque crítico.
-            // 2. Atribuir os dados retornados ao dgvRelatorio.DataSource.
-            // 3. Calcular e atualizar o lblValorTotal.
-            // **********************************************
+            AtualizarDadosRelatorio();
+        }
 
-            // Exemplo de como você atualizaria o label de total:
-            // double valorTotalCalculado = 1250.75; 
-            // int itensEmFalta = 15;
-            // lblValorTotal.Text = $"Total de itens em falta: {itensEmFalta} (R$ {valorTotalCalculado:N2})";
+        // Lógica central para gerar/atualizar o relatório
+        private void AtualizarDadosRelatorio()
+        {
+            try
+            {
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+
+                // CHAVE DA CORREÇÃO: Usa o método específico para o relatório de estoque crítico
+                List<Produto> listaCritica = produtoDAO.ObterProdutosComEstoqueBaixo(); //
+
+                // 3. Vincule a lista à DataGridView
+                dgvRelatorio.DataSource = listaCritica;
+
+                // 4. Cálculo e exibição do sumário
+                int itensEmFalta = listaCritica.Count;
+                decimal valorTotalEmEstoqueCritico = 0;
+
+                // Cálculo do valor total
+                foreach (var item in listaCritica)
+                {
+                    // Usa as propriedades Quantidade e Preco do objeto Produto
+                    valorTotalEmEstoqueCritico += (item.Quantidade * item.Preco);
+                }
+
+                lblValorTotal.Text = $"Total de itens críticos: {itensEmFalta} (Valor em estoque: R$ {valorTotalEmEstoqueCritico:N2})";
+
+                if (itensEmFalta == 0)
+                {
+                    // Limpa a DGV se não houver dados
+                    dgvRelatorio.DataSource = null;
+                    MessageBox.Show("Nenhum produto com estoque crítico encontrado.", "Relatório Completo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao gerar relatório. Verifique a query SQL no ProdutoDAO. Detalhe: {ex.Message}", "Erro de Relatório", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnFechar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
