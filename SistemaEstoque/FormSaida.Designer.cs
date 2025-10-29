@@ -1,6 +1,6 @@
 ﻿namespace SistemaEstoque
 {
-    partial class FormSaida
+    partial class FormConfiguracaoAcessibilidade
     {
         /// <summary>
         /// Required designer variable.
