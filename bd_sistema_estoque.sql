@@ -18,6 +18,18 @@ CREATE TABLE IF NOT EXISTS categoria (
 );
 
 -- ----------------------------
+-- 2.1. Tabela: fornecedor (NOVA)
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS fornecedor (
+    idfornecedor INT NOT NULL AUTO_INCREMENT,
+    razao_social VARCHAR(150) NOT NULL,
+    cnpj VARCHAR(18) NOT NULL UNIQUE,
+    nome_fantasia VARCHAR(100),
+    email VARCHAR(100),
+    PRIMARY KEY (idfornecedor)
+);
+
+-- ----------------------------
 -- 3. Tabela: usuario (CORRIGIDA E MELHORADA)
 -- Suporta hash forte (VARCHAR(255)) e controle de acesso (nivel_acesso).
 -- ----------------------------
