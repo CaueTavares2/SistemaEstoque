@@ -1,99 +1,79 @@
---
--- SCRIPT DE CRIAÇÃO DO BANCO DE DADOS E TABELAS (Versão Otimizada)
---
-
--- 1. Cria o Banco de Dados (se não existir)
+-- BANCO DE DADOS SIMPLIFICADO - SISTEMA ESTOQUE
 CREATE DATABASE IF NOT EXISTS bd_sistema_estoque;
-
--- Seleciona o banco de dados para uso
 USE bd_sistema_estoque;
 
--- ----------------------------
--- 2. Tabela: categoria
--- ----------------------------
+-- TABELAS BÁSICAS
 CREATE TABLE IF NOT EXISTS categoria (
-    idcategoria INT NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL UNIQUE,
-    PRIMARY KEY (idcategoria)
+    idcategoria INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) UNIQUE NOT NULL
 );
 
--- ----------------------------
--- 3. Tabela: usuario (CORRIGIDA E MELHORADA)
--- Suporta hash forte (VARCHAR(255)) e controle de acesso (nivel_acesso).
--- ----------------------------
 CREATE TABLE IF NOT EXISTS usuario (
-    idusuario INT NOT NULL AUTO_INCREMENT,
-    login VARCHAR(50) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL, -- Aumentado para máxima compatibilidade com hashing seguro (PBKDF2/Argon2)
-    nivel_acesso VARCHAR(20) NOT NULL DEFAULT 'Operador', -- NOVO: Permissões (Ex: Admin, Operador)
-    PRIMARY KEY (idusuario)
+    idusuario INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    nivel_acesso VARCHAR(20) DEFAULT 'Operador'
 );
 
--- ----------------------------
--- 4. Tabela: produto
--- ----------------------------
 CREATE TABLE IF NOT EXISTS produto (
-    idproduto INT NOT NULL AUTO_INCREMENT,
+    idproduto INT AUTO_INCREMENT PRIMARY KEY,
     nome_produto VARCHAR(255) NOT NULL,
-    quantidade INT NOT NULL DEFAULT 0,
-    preco_venda DECIMAL(10, 2) NOT NULL,
-    estoque_minimo INT NOT NULL DEFAULT 1,
+    quantidade INT DEFAULT 0,
+    preco_venda DECIMAL(10,2) NOT NULL,
+    estoque_minimo INT DEFAULT 1,
     fk_categoria_idcategoria INT NOT NULL,
-    PRIMARY KEY (idproduto),
     FOREIGN KEY (fk_categoria_idcategoria) REFERENCES categoria(idcategoria)
-        ON DELETE RESTRICT 
-        ON UPDATE CASCADE
 );
 
--- ----------------------------
--- 5. Tabela: movimentacao (MELHORADA COM AUDITORIA)
--- Rastreia quem fez o movimento.
--- ----------------------------
+CREATE TABLE IF NOT EXISTS fornecedor (
+    idfornecedor INT AUTO_INCREMENT PRIMARY KEY,
+    razao_social VARCHAR(255) NOT NULL,
+    cnpj VARCHAR(18) UNIQUE NOT NULL,
+    nome_fantasia VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS movimentacao (
-    idmovimentacao INT NOT NULL AUTO_INCREMENT,
+    idmovimentacao INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(10) NOT NULL,
     quantidade INT NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
-    `date` DATETIME NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    date DATETIME NOT NULL,
     fk_produto_idproduto INT NOT NULL,
-    fk_usuario_idusuario INT NOT NULL, -- NOVO: Chave Estrangeira para o usuário que registrou
-    PRIMARY KEY (idmovimentacao),
-    FOREIGN KEY (fk_produto_idproduto) REFERENCES produto(idproduto)
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE,
-    FOREIGN KEY (fk_usuario_idusuario) REFERENCES usuario(idusuario) -- Nova Foreign Key
-        ON DELETE RESTRICT -- Impede a exclusão de um usuário com movimentações
-        ON UPDATE CASCADE
+    fk_usuario_idusuario INT NOT NULL,
+    FOREIGN KEY (fk_produto_idproduto) REFERENCES produto(idproduto),
+    FOREIGN KEY (fk_usuario_idusuario) REFERENCES usuario(idusuario)
 );
 
--- 6. Tabela de Fornecedor
-
--- Tabela de Fornecedores
-CREATE TABLE IF NOT EXISTS fornecedor (
-    idfornecedor INT NOT NULL AUTO_INCREMENT,
-    razao_social VARCHAR(255) NOT NULL,
-    cnpj VARCHAR(18) NOT NULL UNIQUE,
-    nome_fantasia VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    PRIMARY KEY (idfornecedor)
+-- NOVA TABELA DE ACESSIBILIDADE
+CREATE TABLE IF NOT EXISTS config_acessibilidade (
+    idconfig INT AUTO_INCREMENT PRIMARY KEY,
+    fk_usuario_idusuario INT UNIQUE NOT NULL,
+    tema_escuro BOOLEAN DEFAULT FALSE,
+    fonte_tamanho INT DEFAULT 9,
+    alto_contraste BOOLEAN DEFAULT FALSE,
+    leitor_tela BOOLEAN DEFAULT FALSE,
+    navegacao_teclado BOOLEAN DEFAULT TRUE,
+    descricao_imagens BOOLEAN DEFAULT FALSE,
+    contraste_cores VARCHAR(20) DEFAULT 'normal',
+    FOREIGN KEY (fk_usuario_idusuario) REFERENCES usuario(idusuario) ON DELETE CASCADE
 );
 
--- Inserir alguns fornecedores de exemplo
-INSERT INTO fornecedor (razao_social, cnpj, nome_fantasia, email) VALUES 
-('Tech Solutions LTDA', '12.345.678/0001-95', 'Tech Solutions', 'vendas@techsolutions.com.br'),
-('Alimentos São João SA', '98.765.432/0001-11', 'Supermercado São João', 'compras@sjoao.com.br'),
-('Ferramentas Gerais ME', '11.222.333/0001-44', 'Ferramentas Express', 'contato@ferramentasexpress.com.br');
-
---
 -- DADOS INICIAIS
---
 INSERT INTO categoria (nome) VALUES 
-('Eletrônicos'), 
-('Alimentos'), 
-('Ferramentas'),
-('Escritório');
+('Eletrônicos'), ('Alimentos'), ('Ferramentas'), ('Escritório');
 
-INSERT INTO produto 
-    (nome_produto, quantidade, preco_venda, estoque_minimo, fk_categoria_idcategoria) 
-VALUES 
-    ('Mouse Gamer RGB', 15, 89.90, 5, 1);
+INSERT INTO usuario (login, senha, nivel_acesso) VALUES 
+('admin', SHA2('admin', 256), 'Admin'),
+('operador', SHA2('operador', 256), 'Operador');
+
+INSERT INTO fornecedor (razao_social, cnpj, nome_fantasia, email) VALUES 
+('Tech Solutions LTDA', '12.345.678/0001-95', 'Tech Solutions', 'vendas@tech.com');
+
+INSERT INTO produto (nome_produto, quantidade, preco_venda, estoque_minimo, fk_categoria_idcategoria) VALUES 
+('Mouse Gamer', 15, 89.90, 5, 1);
+
+INSERT INTO config_acessibilidade (fk_usuario_idusuario) 
+SELECT idusuario FROM usuario;
+
+SELECT 'Banco criado com sucesso!' as Status;
