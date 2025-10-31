@@ -1,6 +1,7 @@
 ﻿// Arquivo: FormCadastroUsuario.cs (REVISADO)
 
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
 using SistemaEstoque.Logger;
@@ -14,23 +15,52 @@ namespace SistemaEstoque
             InitializeComponent();
         }
 
-        private void btnCadastrarUsuario_Click_1(object sender, EventArgs e) // <--- ESTE É O MÉTODO QUE DEVE SER LIGADO AO BOTÃO
+        private bool ValidarForcaSenha(string senha)
         {
-            // 1. Coleta de dados
+            if (senha.Length < 8)
+                return false;
+
+            bool temDigito = false;
+            bool temMaiuscula = false;
+            bool temMinuscula = false;
+
+            // Verificação manual sem LINQ
+            foreach (char c in senha)
+            {
+                if (char.IsDigit(c)) temDigito = true;
+                if (char.IsUpper(c)) temMaiuscula = true;
+                if (char.IsLower(c)) temMinuscula = true;
+            }
+
+            return temDigito && temMaiuscula && temMinuscula;
+        }
+
+        private void btnCadastrarUsuario_Click_1(object sender, EventArgs e)
+        {
             string login = txtLogin.Text.Trim();
             string senha = txtSenha.Text;
             string confirmaSenha = txtConfirmaSenha.Text;
 
-            // 2. Validações Básicas
+            // Validações existentes...
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
             {
-                MessageBox.Show("Login e Senha não podem estar vazios.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Login e Senha não podem estar vazios.", "Erro",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (senha != confirmaSenha)
             {
-                MessageBox.Show("A senha e a confirmação de senha não coincidem.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("A senha e a confirmação de senha não coincidem.", "Erro",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // NOVA VALIDAÇÃO: Força da senha
+            if (!ValidarForcaSenha(senha))
+            {
+                MessageBox.Show("A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e números.",
+                               "Senha Fraca", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

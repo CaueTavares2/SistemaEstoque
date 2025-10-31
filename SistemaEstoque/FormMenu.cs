@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using SistemaEstoque.DAO; // Importante para acessar o ProdutoDAO
+using SistemaEstoque.DAO;
 using SistemaEstoque.Classes;
 
 namespace SistemaEstoque
@@ -12,20 +12,41 @@ namespace SistemaEstoque
             InitializeComponent();
             VerificarPermissoes();
             VerificarEstoqueBaixo();
+
+            AcessibilidadeGlobal.CarregarConfiguracoesUsuario(UserSession.IdUsuario);
+            AcessibilidadeGlobal.AplicarConfiguracoes(this);
+        }
+
+        private void btnAcessibilidade_Click(object sender, EventArgs e)
+        {
+            using (var formAcessibilidade = new FormAcessibilidade())
+            {
+                formAcessibilidade.ShowDialog();
+
+                // Recarrega e aplica as configurações após fechar o form
+                AcessibilidadeGlobal.CarregarConfiguracoesUsuario(UserSession.IdUsuario);
+                AcessibilidadeGlobal.AplicarConfiguracoes(this);
+            }
         }
 
         private void VerificarPermissoes()
         {
-            // Restrição: Apenas o 'Admin' pode acessar o cadastro de usuários.
+            // Permissões mais específicas
             if (UserSession.NivelAcesso != "Admin")
             {
-                // Verifica se o componente 'btnCadastroUsuario' existe e o desabilita
                 var btnUser = this.Controls.Find("btnCadastroUsuario", true);
                 if (btnUser.Length > 0 && btnUser[0] is Button btn)
                 {
                     btn.Enabled = false;
                     btn.Text = "Cadastro Usuário (Restrito)";
                     btn.BackColor = System.Drawing.Color.LightGray;
+                }
+
+                // Exemplo: Operador não pode excluir produtos
+                var btnExcluir = this.Controls.Find("btnExcluir", true);
+                if (btnExcluir.Length > 0 && btnExcluir[0] is Button btnExcl)
+                {
+                    btnExcl.Enabled = false;
                 }
             }
         }
@@ -75,5 +96,7 @@ namespace SistemaEstoque
         {
 
         }
+
+        
     }
 }

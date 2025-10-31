@@ -34,6 +34,7 @@
             this.btnSairMenu = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAcessibilidade = new System.Windows.Forms.Button();
             this.btnFornecedores = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -44,7 +45,7 @@
             this.btnCadastro.Location = new System.Drawing.Point(93, 30);
             this.btnCadastro.Name = "btnCadastro";
             this.btnCadastro.Size = new System.Drawing.Size(120, 40);
-            this.btnCadastro.TabIndex = 1; // TabIndex 1
+            this.btnCadastro.TabIndex = 1;
             this.btnCadastro.Text = "Cadastro (Prod.)";
             this.btnCadastro.UseVisualStyleBackColor = true;
             this.btnCadastro.Click += new System.EventHandler(this.btnCadastro_Click);
@@ -55,7 +56,7 @@
             this.btnListagem.Location = new System.Drawing.Point(233, 30);
             this.btnListagem.Name = "btnListagem";
             this.btnListagem.Size = new System.Drawing.Size(120, 40);
-            this.btnListagem.TabIndex = 2; // TabIndex 2
+            this.btnListagem.TabIndex = 2;
             this.btnListagem.Text = "Listagem";
             this.btnListagem.UseVisualStyleBackColor = true;
             this.btnListagem.Click += new System.EventHandler(this.btnListagem_Click);
@@ -66,7 +67,7 @@
             this.btnRelatorio.Location = new System.Drawing.Point(93, 90);
             this.btnRelatorio.Name = "btnRelatorio";
             this.btnRelatorio.Size = new System.Drawing.Size(120, 40);
-            this.btnRelatorio.TabIndex = 4; // TabIndex 4
+            this.btnRelatorio.TabIndex = 4;
             this.btnRelatorio.Text = "Relatório";
             this.btnRelatorio.UseVisualStyleBackColor = true;
             this.btnRelatorio.Click += new System.EventHandler(this.btnRelatorio_Click);
@@ -76,10 +77,10 @@
             this.btnSairMenu.BackColor = System.Drawing.Color.LightCoral;
             this.btnSairMenu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnSairMenu.ForeColor = System.Drawing.Color.White;
-            this.btnSairMenu.Location = new System.Drawing.Point(260, 212); // Posição centralizada abaixo do GroupBox
+            this.btnSairMenu.Location = new System.Drawing.Point(260, 212);
             this.btnSairMenu.Name = "btnSairMenu";
             this.btnSairMenu.Size = new System.Drawing.Size(90, 35);
-            this.btnSairMenu.TabIndex = 6; // TabIndex 6 (Último)
+            this.btnSairMenu.TabIndex = 6;
             this.btnSairMenu.Text = "Sair do Menu";
             this.btnSairMenu.UseVisualStyleBackColor = false;
             this.btnSairMenu.Click += new System.EventHandler(this.btnSairMenu_Click);
@@ -90,7 +91,7 @@
             this.btnSaida.Location = new System.Drawing.Point(373, 30);
             this.btnSaida.Name = "btnSaida";
             this.btnSaida.Size = new System.Drawing.Size(120, 40);
-            this.btnSaida.TabIndex = 3; // TabIndex 3
+            this.btnSaida.TabIndex = 3;
             this.btnSaida.Text = "Saída";
             this.btnSaida.UseVisualStyleBackColor = true;
             this.btnSaida.Click += new System.EventHandler(this.btnSaida_Click);
@@ -98,6 +99,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.groupBox1.Controls.Add(this.btnAcessibilidade);
             this.groupBox1.Controls.Add(this.btnFornecedores);
             this.groupBox1.Controls.Add(this.btnSaida);
             this.groupBox1.Controls.Add(this.btnRelatorio);
@@ -107,10 +109,21 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 40);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 10);
-            this.groupBox1.Size = new System.Drawing.Size(586, 160); // Aumentamos a altura
-            this.groupBox1.TabIndex = 0; // TabIndex 0
+            this.groupBox1.Size = new System.Drawing.Size(586, 160);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Painel de Ações"; // Nome mais descritivo
+            this.groupBox1.Text = "Painel de Ações";
+            // 
+            // btnAcessibilidade
+            // 
+            this.btnAcessibilidade.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnAcessibilidade.Location = new System.Drawing.Point(373, 90);
+            this.btnAcessibilidade.Name = "btnAcessibilidade";
+            this.btnAcessibilidade.Size = new System.Drawing.Size(120, 40);
+            this.btnAcessibilidade.TabIndex = 6;
+            this.btnAcessibilidade.Text = "Configuração";
+            this.btnAcessibilidade.UseVisualStyleBackColor = true;
+            this.btnAcessibilidade.Click += new System.EventHandler(this.btnAcessibilidade_Click);
             // 
             // btnFornecedores
             // 
@@ -118,7 +131,7 @@
             this.btnFornecedores.Location = new System.Drawing.Point(233, 90);
             this.btnFornecedores.Name = "btnFornecedores";
             this.btnFornecedores.Size = new System.Drawing.Size(120, 40);
-            this.btnFornecedores.TabIndex = 5; // TabIndex 5
+            this.btnFornecedores.TabIndex = 5;
             this.btnFornecedores.Text = "Fornecedores";
             this.btnFornecedores.UseVisualStyleBackColor = true;
             this.btnFornecedores.Click += new System.EventHandler(this.btnFornecedores_Click);
@@ -128,7 +141,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(610, 270); // Ajustamos a altura
+            this.ClientSize = new System.Drawing.Size(610, 270);
             this.Controls.Add(this.btnSairMenu);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
@@ -149,5 +162,6 @@
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnFornecedores;
+        private System.Windows.Forms.Button btnAcessibilidade;
     }
 }

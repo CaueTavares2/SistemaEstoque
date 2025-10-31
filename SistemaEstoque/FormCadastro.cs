@@ -17,7 +17,7 @@ namespace SistemaEstoque
             PreencherCategorias();
         }
 
-        // Construtor para EDIÇÃO
+        
         public FormCadastro(Produto p) : this()
         {
             produtoEditando = p;

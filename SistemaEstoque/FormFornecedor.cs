@@ -4,6 +4,7 @@ using System;
 using System.Windows.Forms;
 using SistemaEstoque.DAO;
 using System.Linq;
+using SistemaEstoque.Utils;
 
 namespace SistemaEstoque
 {
@@ -39,7 +40,9 @@ namespace SistemaEstoque
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao carregar fornecedores: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao carregar fornecedores: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Opcional: definir DataSource nulo em caso de erro
+                dgvFornecedores.DataSource = null;
             }
         }
 
@@ -70,12 +73,19 @@ namespace SistemaEstoque
 
         private void ValidarFormatoCNPJ()
         {
-            // Verifica se o MaskedTextBox NÃO está completamente preenchido (ignorando separadores)
             if (txtCnpj.MaskCompleted == false)
             {
-                throw new Exception("O campo CNPJ está incompleto ou inválido.");
+                throw new Exception("O campo CNPJ está incompleto.");
+            }
+
+            // NOVA VALIDAÇÃO: Verifica se o CNPJ é válido
+            string cnpjLimpo = ValidacaoHelper.LimparCNPJ(txtCnpj.Text);
+            if (!ValidacaoHelper.ValidarCNPJ(cnpjLimpo))
+            {
+                throw new Exception("CNPJ inválido.");
             }
         }
+
 
         private bool ValidarCampos()
         {
@@ -83,22 +93,34 @@ namespace SistemaEstoque
                 string.IsNullOrWhiteSpace(txtNomeFantasia.Text) ||
                 string.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                MessageBox.Show("Razão Social, Nome Fantasia e E-mail são obrigatórios.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Razão Social, Nome Fantasia e E-mail são obrigatórios.",
+                               "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // NOVA VALIDAÇÃO DE EMAIL
+            if (!ValidacaoHelper.ValidarEmail(txtEmail.Text))
+            {
+                MessageBox.Show("E-mail inválido.", "Validação",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             try
             {
-                ValidarFormatoCNPJ(); // Valida se a máscara foi preenchida
+                ValidarFormatoCNPJ();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(ex.Message, "Validação",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             return true;
         }
+
+
 
         // ------------------------------------------
         // EVENTOS DE BOTÃO
@@ -112,7 +134,7 @@ namespace SistemaEstoque
             {
                 Id = fornecedorIdSelecionado,
                 RazaoSocial = txtRazaoSocial.Text.Trim(),
-                Cnpj = txtCnpj.Text, // Para MaskedTextBox, pegamos o .Text diretamente
+                Cnpj = txtCnpj.Text,
                 NomeFantasia = txtNomeFantasia.Text.Trim(),
                 Email = txtEmail.Text.Trim()
             };
@@ -135,7 +157,7 @@ namespace SistemaEstoque
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao salvar o fornecedor: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao salvar o fornecedor: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -143,7 +165,10 @@ namespace SistemaEstoque
         {
             if (fornecedorIdSelecionado == 0) return;
 
-            var resposta = MessageBox.Show($"Deseja realmente excluir o fornecedor '{txtRazaoSocial.Text}'?", "Confirmação de Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var resposta = MessageBox.Show($"Deseja realmente excluir o fornecedor '{txtRazaoSocial.Text}'?",
+                                          "Confirmação de Exclusão",
+                                          MessageBoxButtons.YesNo,
+                                          MessageBoxIcon.Question);
 
             if (resposta == DialogResult.Yes)
             {
@@ -156,7 +181,7 @@ namespace SistemaEstoque
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao excluir o fornecedor: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Erro ao excluir o fornecedor: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

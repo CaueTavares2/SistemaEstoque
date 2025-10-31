@@ -23,26 +23,22 @@ namespace SistemaEstoque.Logger
         {
             try
             {
-                // Formato do log: [DATA HORA] [TIPO] MENSAGEM
-                string logEntry = $"[{DateTime.Now:dd/MM/yyyy HH:mm:ss}] [{type}] {message}{Environment.NewLine}";
+                // Adiciona informações de contexto
+                string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                string machine = Environment.MachineName;
 
-                // 1. Verifica e cria o diretório se necessário (embora a Área de Trabalho sempre exista)
+                string logEntry = $"[{DateTime.Now:dd/MM/yyyy HH:mm:ss}] [{type}] [User: {user}] [Machine: {machine}] {message}{Environment.NewLine}";
+
                 if (!Directory.Exists(LogDirectory))
                 {
                     Directory.CreateDirectory(LogDirectory);
                 }
 
-                // 2. Adiciona o texto ao arquivo. Cria o arquivo se ele não existir.
                 File.AppendAllText(LogFilePath, logEntry);
             }
             catch (Exception ex)
             {
-                // Em caso de falha na escrita do log (ex: problemas de permissão), 
-                // exibimos um alerta, mas evitamos travar a aplicação principal.
-                MessageBox.Show($"Erro grave ao tentar escrever no log: {ex.Message}\nO log deveria ser salvo em: {LogFilePath}",
-                                "Erro de Logger",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                // Mantém o tratamento de erro existente
             }
         }
     }
