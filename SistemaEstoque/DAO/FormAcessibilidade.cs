@@ -16,6 +16,17 @@ namespace SistemaEstoque
             InitializeComponent();
             configDAO = new ConfigAcessibilidadeDAO();
             configAtual = new ConfigAcessibilidade();
+
+            // Tenta criar a tabela se não existir
+            try
+            {
+                configDAO.CriarTabelaSeNaoExiste();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Aviso: Não foi possível verificar/criar a tabela de acessibilidade. Erro: {ex.Message}",
+                              "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void FormAcessibilidade_Load(object sender, EventArgs e)
@@ -116,6 +127,7 @@ namespace SistemaEstoque
         {
             try
             {
+                // Cria uma configuração temporária para preview
                 var previewConfig = new ConfigAcessibilidade
                 {
                     TemaEscuro = chkTemaEscuro.Checked,
@@ -124,8 +136,8 @@ namespace SistemaEstoque
                     ContrasteCores = cmbContraste.SelectedItem?.ToString() ?? "normal"
                 };
 
-                AplicarConfiguracoesPreview(pnlPreview, previewConfig);
-                AplicarConfiguracoesPreview(lblPreview, previewConfig);
+                // Aplica no panel de preview e label
+                AplicarConfiguracoesPreview(pnlPreview, lblPreview, previewConfig);
             }
             catch (Exception ex)
             {
@@ -133,28 +145,60 @@ namespace SistemaEstoque
             }
         }
 
-        private void AplicarConfiguracoesPreview(Control control, ConfigAcessibilidade config)
+        private void AplicarConfiguracoesPreview(Panel panel, Label label, ConfigAcessibilidade config)
         {
-            if (control is Label label)
-            {
-                label.Font = new Font(label.Font.FontFamily, config.FonteTamanho, label.Font.Style);
-            }
+            // Aplica tamanho da fonte
+            label.Font = new Font(label.Font.FontFamily, config.FonteTamanho, label.Font.Style);
 
-            if (config.TemaEscuro)
-            {
-                if (control is Panel panel) panel.BackColor = Color.FromArgb(45, 45, 48);
-                if (control is Label lbl) lbl.BackColor = Color.FromArgb(45, 45, 48);
-            }
-            else
-            {
-                if (control is Panel panel) panel.BackColor = SystemColors.Window;
-                if (control is Label lbl) lbl.BackColor = SystemColors.Window;
-            }
+            // **CORREÇÃO: Reseta as cores primeiro**
+            panel.BackColor = SystemColors.Window;
+            label.BackColor = SystemColors.Window;
+            label.ForeColor = SystemColors.WindowText;
+            panel.BorderStyle = BorderStyle.FixedSingle;
 
+            // **CORREÇÃO: Aplica ALTO CONTRASTE primeiro (tem prioridade)**
             if (config.AltoContraste)
             {
-                if (control is Panel panel) panel.BackColor = Color.Black;
-                if (control is Label lbl) lbl.BackColor = Color.Black;
+                panel.BackColor = Color.Black;
+                label.BackColor = Color.Black;
+                label.ForeColor = Color.White;
+                panel.BorderStyle = BorderStyle.Fixed3D;
+
+                // **CORREÇÃO: Adiciona borda branca para melhor visibilidade**
+                label.BorderStyle = BorderStyle.FixedSingle;
+            }
+            // **CORREÇÃO: Tema escuro só aplica se alto contraste não estiver ativo**
+            else if (config.TemaEscuro)
+            {
+                panel.BackColor = Color.FromArgb(45, 45, 48);
+                label.BackColor = Color.FromArgb(45, 45, 48);
+                label.ForeColor = Color.White;
+                label.BorderStyle = BorderStyle.None;
+            }
+
+            AplicarEsquemaCoresPreview(label, config.ContrasteCores, config.AltoContraste);
+        }
+
+        private void AplicarEsquemaCoresPreview(Label label, string esquema, bool altoContrasteAtivo)
+        {
+            // **CORREÇÃO: Só aplica esquemas de cores se não estiver em alto contraste**
+            if (altoContrasteAtivo) return;
+
+            switch (esquema)
+            {
+                case "protanopia":
+                    label.ForeColor = Color.FromArgb(0, 100, 200); // Azul forte
+                    break;
+                case "deuteranopia":
+                    label.ForeColor = Color.FromArgb(200, 100, 0); // Laranja/vermelho
+                    break;
+                case "tritanopia":
+                    label.ForeColor = Color.FromArgb(150, 150, 0); // Amarelo esverdeado
+                    break;
+                case "normal":
+                default:
+                    // Mantém a cor definida pelo tema
+                    break;
             }
         }
 
