@@ -66,6 +66,24 @@ CREATE TABLE IF NOT EXISTS movimentacao (
         ON UPDATE CASCADE
 );
 
+-- 6. Tabela de Fornecedor
+
+-- Tabela de Fornecedores
+CREATE TABLE IF NOT EXISTS fornecedor (
+    idfornecedor INT NOT NULL AUTO_INCREMENT,
+    razao_social VARCHAR(255) NOT NULL,
+    cnpj VARCHAR(18) NOT NULL UNIQUE,
+    nome_fantasia VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    PRIMARY KEY (idfornecedor)
+);
+
+-- Inserir alguns fornecedores de exemplo
+INSERT INTO fornecedor (razao_social, cnpj, nome_fantasia, email) VALUES 
+('Tech Solutions LTDA', '12.345.678/0001-95', 'Tech Solutions', 'vendas@techsolutions.com.br'),
+('Alimentos São João SA', '98.765.432/0001-11', 'Supermercado São João', 'compras@sjoao.com.br'),
+('Ferramentas Gerais ME', '11.222.333/0001-44', 'Ferramentas Express', 'contato@ferramentasexpress.com.br');
+
 --
 -- DADOS INICIAIS
 --
